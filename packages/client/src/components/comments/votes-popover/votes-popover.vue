@@ -1,6 +1,6 @@
 <script>
 // imports.
-import { get, map, orderBy, slice } from 'lodash-es'
+import * as _ from 'lodash'
 import UCommentsVoteItem from 'src/components/comments/vote-item'
 
 // post author component (author avatar box).
@@ -39,12 +39,12 @@ export default {
 
     // active votes.
     activeVotes () {
-      const votes = map(get(this.comment, 'active_votes', []), (vote) => {
+      const votes = _.map(_.get(this.comment, 'active_votes', []), (vote) => {
         vote.rshares = parseInt(vote.rshares)
         vote.order = vote.weight * vote.percent
         return vote
       })
-      return slice(orderBy(votes, ['order'], ['desc']), 0, 100)
+      return _.slice(_.orderBy(votes, ['order'], ['desc']), 0, 100)
     }
   },
 

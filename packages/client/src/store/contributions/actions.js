@@ -4,7 +4,7 @@
 import firebase from 'firebase/app'
 import { queryBuilder } from 'src/services/firebase/firestore/query'
 // lodash helpers.
-import { toString, first } from 'lodash-es'
+import * as _ from 'lodash'
 import { parsePost } from 'src/services/steem/parsers/post'
 
 export const loadDrafts = ({ commit, getters, dispatch, rootGetters }) => {
@@ -29,7 +29,7 @@ export const getContribution = (store, { author, permlink }) => {
     .where('author', '==', toString(author).replace('@', ''))
     .where('permlink', '==', permlink)
     .get()
-    .then(snapshot => first(snapshot.docs))
+    .then(snapshot => _.first(snapshot.docs))
     .then(doc => doc ? doc.data() : null)
 }
 

@@ -1,6 +1,6 @@
 // imports.
 import sdk from 'sc2-sdk'
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 
 // generate the callback url from route and origin.
 const getCallbackURL = () => {
@@ -9,7 +9,7 @@ const getCallbackURL = () => {
 }
 
 // determine the client id.
-export const clientId = get(process.env, 'SC2_APP', 'utopian.app')
+export const clientId = _.get(process.env, 'SC2_APP', 'utopian.app')
 // token scopes.
 export const scopes = ['vote', 'comment', 'comment_options', 'custom_json']
 // callback URL.

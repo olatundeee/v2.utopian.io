@@ -2,7 +2,7 @@
 import UPostAuthor from 'src/components/posts/author/author'
 import UCommentsVoteItem from 'src/components/comments/vote-item/vote-item'
 // import { parseAsHtml } from 'src/services/steem/parsers/markdown'
-import { get, find, orderBy, map } from 'lodash-es'
+import * as _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import UCommentsActions from 'src/components/comments/actions/actions'
 // import { parser, sanitizer } from 'src/services/workers/markdown'
@@ -69,26 +69,26 @@ export default {
         return null
       }
 
-      return find(this.activeVotes, (vote) => {
+      return _.find(this.activeVotes, (vote) => {
         return vote.voter === this.username
       })
     },
 
     upvoted () {
-      return get(this.currentVote, 'percent', 0) > 0
+      return _.get(this.currentVote, 'percent', 0) > 0
     },
 
     downvoted () {
-      return get(this.currentVote, 'percent', 0) < 0
+      return _.get(this.currentVote, 'percent', 0) < 0
     },
 
     activeVotes () {
-      const votes = map(get(this.reply, 'active_votes', [], (vote) => {
+      const votes = _.map(_.get(this.reply, 'active_votes', [], (vote) => {
         vote.rshares = parseInt(vote.rshares)
         vote.order = vote.weight * vote.percent
         return vote
       }))
-      return orderBy(votes, ['order'], ['desc'])
+      return _.orderBy(votes, ['order'], ['desc'])
     }
   },
 
@@ -99,7 +99,7 @@ export default {
     ]),
 
     calculateVoteValue (rshares) {
-      return parseInt(rshares) / get(this.rewardFund, 'recent_claims', 0) * get(this.rewardFund, 'reward_balance', 0) * this.feed
+      return parseInt(rshares) / _.get(this.rewardFund, 'recent_claims', 0) * _.get(this.rewardFund, 'reward_balance', 0) * this.feed
     },
 
     castVote (weight) {
@@ -132,7 +132,7 @@ export default {
   },
 
   mounted () {
-    render(get(this.reply, 'body')).then((result) => { this.body = result })
+    render(_.get(this.reply, 'body')).then((result) => { this.body = result })
   }
 
 }

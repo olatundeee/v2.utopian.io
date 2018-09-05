@@ -1,5 +1,5 @@
 // import lodash helpers.
-import { merge } from 'lodash-es'
+import * as _ from 'lodash'
 // slugify helper.
 import slugify from 'slugify'
 // moment date helpers.
@@ -12,7 +12,7 @@ export const baseMetadata = {
 }
 
 // metadata generator.
-export const generateMetadata = (meta) => merge(baseMetadata, meta)
+export const generateMetadata = (meta) => _.merge(baseMetadata, meta)
 
 /**
  * Generate a slug for a reply based on the parent author, permlink and author name.

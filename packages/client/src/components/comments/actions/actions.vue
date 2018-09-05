@@ -2,7 +2,7 @@
 import UCommentsVotesPopover from 'src/components/comments/votes-popover/votes-popover'
 import UCommentsPayoutPopover from 'src/components/comments/payout-popover/payout-popover'
 import { mapGetters, mapActions } from 'vuex'
-import { get, find, cloneDeep } from 'lodash-es'
+import * as _ from 'lodash'
 import { parseCurrencyString } from 'src/services/currencies/formatter'
 import { render } from 'src/services/common/markdown/markdown'
 import { getContent } from 'src/services/steem/posts'
@@ -27,7 +27,7 @@ export default {
   data () {
     return {
       // props is clone to change data after an action
-      post: cloneDeep(this.comment),
+      post: _.cloneDeep(this.comment),
       broadcasting: false,
       showingVotes: false,
       showingPayout: false,
@@ -35,7 +35,7 @@ export default {
       replyBody: '',
       replyPreview: '',
       showVoteComponent: false,
-      voteValue: get(this.currentVote, 'percent', 0) || 100,
+      voteValue: _.get(this.currentVote, 'percent', 0) || 100,
       voteDollarValue: ''
     }
   },
@@ -68,13 +68,13 @@ export default {
       if (!this.userDetails) {
         return null
       }
-      return find(get(this.post, 'active_votes'), (vote) => (vote.voter === this.userDetails.name))
+      return _.find(_.get(this.post, 'active_votes'), (vote) => (vote.voter === this.userDetails.name))
     },
     votesCount () {
-      return get(this.post, 'net_votes', 0)
+      return _.get(this.post, 'net_votes', 0)
     },
     upvoted () {
-      return get(this.currentVote, 'percent', 0) > 0
+      return _.get(this.currentVote, 'percent', 0) > 0
     },
     upvoteColor () {
       return this.upvoted ? 'primary' : 'grey-7'
@@ -95,7 +95,7 @@ export default {
       return this.downvoted ? 'Unvote' : 'Downvote'
     },
     downvoted () {
-      return get(this.currentVote, 'percent', 0) < 0
+      return _.get(this.currentVote, 'percent', 0) < 0
     },
     toggleUpvoteTooltip () {
       return {
@@ -204,7 +204,7 @@ export default {
     }
   },
   created () {
-    this.voteValue = get(this.currentVote, 'percent', 10000) / 100
+    this.voteValue = _.get(this.currentVote, 'percent', 10000) / 100
   }
 }
 </script>

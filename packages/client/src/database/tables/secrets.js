@@ -1,12 +1,12 @@
 // imports.
 import { secrets } from 'src/database'
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 
 // all secrets.
 export const all = () => secrets.toArray()
 
 // find a secret by key.
-export const find = (name) => secrets.get({ name }).then(record => get(record, 'value', null))
+export const find = (name) => secrets.get({ name }).then(record => _.get(record, 'value', null))
 
 // save a secret under a key.
 export const save = (name, value = {}) => secrets.put({ name, value }).then(() => find(name))

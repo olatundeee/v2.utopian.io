@@ -1,4 +1,4 @@
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 import moment from 'moment/moment'
 
 /**
@@ -6,11 +6,11 @@ import moment from 'moment/moment'
  */
 export const parseSteemConnectCallback = (callbackData) => {
   // extract access token.
-  const token = get(callbackData, 'access_token', null)
+  const token = _.get(callbackData, 'access_token', null)
   // extract username.
-  const username = get(callbackData, 'username', null)
+  const username = _.get(callbackData, 'username', null)
   // get the expiration ttl (seconds).
-  const ttl = get(callbackData, 'expires_in', null)
+  const ttl = _.get(callbackData, 'expires_in', null)
 
   // stop on missing fields.
   if (!token || !username || !ttl) {

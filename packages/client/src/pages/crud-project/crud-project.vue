@@ -6,7 +6,7 @@ import * as GitHub from '@octokit/rest'
 import { required, minLength } from 'vuelidate/lib/validators'
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase/app'
-import { uniq } from 'lodash-es'
+import * as _ from 'lodash'
 
 // create project component export.
 export default {
@@ -210,7 +210,7 @@ export default {
       const vm = this
       if (vm.project.tags.length === 1) {
         setTimeout(() => {
-          vm.project.tags = uniq(vm.project.tags[0].split(',').map(tag => tag.trim()))
+          vm.project.tags = _.uniq(vm.project.tags[0].split(',').map(tag => tag.trim()))
         }, 0)
       }
     },

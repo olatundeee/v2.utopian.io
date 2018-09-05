@@ -1,6 +1,6 @@
 // imports.
 import { cache } from 'src/database'
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 import moment from 'moment'
 
 // all secrets.
@@ -8,7 +8,7 @@ export const all = () => cache.toArray()
 
 export const remember = async (name, ttl = 5, fallback = null) => {
   const stored = await find(name)
-  const timeCreated = moment.utc(get(stored, 'value.timestamp', '1990-02-11T00:00:00Z'))
+  const timeCreated = moment.utc(_.get(stored, 'value.timestamp', '1990-02-11T00:00:00Z'))
 
   if (timeCreated.isBefore(moment.utc().subtract(ttl, 'minutes'))) {
     return fallback ? fallback().then((result) => save(name, result)) : null
@@ -17,13 +17,13 @@ export const remember = async (name, ttl = 5, fallback = null) => {
 
 // find a secret by key.
 export const find = (name, ttl = 5, fallback = null) => cache.get({ name }).then((record) => {
-  const timeCreated = moment.utc(get(record, 'value.timestamp', '1990-02-11T00:00:00Z'))
+  const timeCreated = moment.utc(_.get(record, 'value.timestamp', '1990-02-11T00:00:00Z'))
 
   if (timeCreated.isBefore(moment.utc().subtract(ttl, 'minutes'))) {
     return fallback ? fallback().then((result) => save(name, result)) : null
   }
 
-  return get(record, 'value.value', null)
+  return _.get(record, 'value.value', null)
 })
 
 // save a secret under a key.

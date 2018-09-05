@@ -2,7 +2,7 @@
 <script>
 // imports.
 import moment from 'moment'
-import { map, get } from 'lodash-es'
+import * as _ from 'lodash'
 import UContributionList from 'src/components/contribution-list/contribution-list'
 import ULayoutPage from 'src/layouts/parts/page/page'
 import { categories, categoryOptions } from 'src/services/utopian/categories'
@@ -60,7 +60,7 @@ export default {
 
     // map the categories into a selectable array.
     categoryOptions () {
-      return map(categoryOptions, (option) => {
+      return _.map(categoryOptions, (option) => {
         // @TODO upper case should be handler at CSS level, not runtime transformations.
         option.label = option.label.toUpperCase()
         return option
@@ -69,15 +69,15 @@ export default {
 
     // currently selected category filter.
     currentCategory () {
-      return get(this.$route, 'params.category', null)
+      return _.get(this.$route, 'params.category', null)
     }
   },
 
   // mounted hook.
   mounted () {
     // start sort and category from route, defaulting to trending, all categories.
-    this.orderBy = get(this.$route, 'meta.order', 'trending')
-    this.category = get(this.$route, 'params.category', 'all')
+    this.orderBy = _.get(this.$route, 'meta.order', 'trending')
+    this.category = _.get(this.$route, 'params.category', 'all')
     this.isMounted = true
   },
 

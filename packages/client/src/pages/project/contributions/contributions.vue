@@ -4,7 +4,7 @@ import UContributionList from 'src/components/contribution-list/contribution-lis
 import ULayoutPage from 'src/layouts/parts/page/page'
 import { categories, categoryOptions } from 'src/services/utopian/categories'
 import { format } from 'quasar'
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 
 const { capitalize } = format
 
@@ -43,7 +43,7 @@ export default {
   },
   mounted () {
     this.isMounted = true
-    this.category = get(this.$route, 'params.category', 'all')
+    this.category = _.get(this.$route, 'params.category', 'all')
   },
   computed: {
     categories () {

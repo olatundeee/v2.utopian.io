@@ -1,7 +1,7 @@
 // import firebase
 import firebase from 'firebase/app'
 // import lodash helpers.
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 // import comment helpers.
 import {
   slugifyTitle,
@@ -21,7 +21,7 @@ export const comment = async ({ getters, dispatch, rootGetters }, {
   meta = {}
 }) => {
   // get username from root store.
-  const author = get(rootGetters, 'auth/username')
+  const author = _.get(rootGetters, 'auth/username')
 
   // generate the reply metadata.
   const metadata = generateMetadata(meta, tags)
@@ -54,7 +54,7 @@ export const updateComment = async ({ getters, dispatch, rootGetters }, {
   meta = {}
 }) => {
   // get username from root store.
-  const author = get(rootGetters, 'auth/username')
+  const author = _.get(rootGetters, 'auth/username')
 
   // generate the reply metadata.
   const metadata = generateMetadata(meta, tags)

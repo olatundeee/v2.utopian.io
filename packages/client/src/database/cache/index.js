@@ -1,6 +1,6 @@
 // imports.
 import Table from 'src/database/tables/table'
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 import moment from 'moment'
 
 // cache table instance.
@@ -25,7 +25,7 @@ export const remember = async (key, ttl = 5, callback = null) => {
 
   // when there was a cached value, return it.
   if (cached) {
-    return Promise.resolve(get(cached, 'value', null))
+    return Promise.resolve(_.get(cached, 'value', null))
   }
 
   // if no cached but no callback provided.
@@ -37,5 +37,5 @@ export const remember = async (key, ttl = 5, callback = null) => {
   // trigger the callback for a new value.
   return callback()
     .then(freshValue => saveOnCache(key, ttl, freshValue))
-    .then((record) => get(record, 'value', null))
+    .then((record) => _.get(record, 'value', null))
 }

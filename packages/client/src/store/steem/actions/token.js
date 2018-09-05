@@ -1,4 +1,4 @@
-import { clone, get } from 'lodash-es'
+import * as _ from 'lodash'
 import { client as baseClient } from 'src/services/steem/connect/client'
 
 // prepare a steem-connect client instance to broadcast something.
@@ -7,11 +7,11 @@ import { client as baseClient } from 'src/services/steem/connect/client'
 export const prepareClient = ({ dispatch }) => {
   return dispatch('auth/getCredential', 'steem', { root: true })
     .then(encryptedToken => {
-      const token = get(encryptedToken, 'secret', null)
+      const token = _.get(encryptedToken, 'secret', null)
       if (token) {
         return dispatch('decrypt', token, { root: true })
           .then((token) => {
-            const client = clone(baseClient)
+            const client = _.clone(baseClient)
             client.setAccessToken(token)
             return client
           })

@@ -1,6 +1,6 @@
 // retrieve the database name.
 import Dexie from 'dexie'
-import { each } from 'lodash-es'
+import * as _ from 'lodash'
 import versions from './versions'
 
 // database name (alias).
@@ -11,7 +11,7 @@ export const initDb = () => {
   // start a database instance.
   const DB = new Dexie(getDBName())
   // loop through database versions.
-  each(versions, version => DB.version(version.version).stores(version.stores))
+  _.each(versions, version => DB.version(version.version).stores(version.stores))
   // returns the database instance itself.
   return DB
 }

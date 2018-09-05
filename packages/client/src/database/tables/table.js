@@ -1,6 +1,6 @@
 // imports.
 import DB from 'src/database'
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 
 /**
  * Abstraction for Dexie table operations.
@@ -68,7 +68,7 @@ class Model {
 
     // when a value field was specified, return the value field on the result.
     if (this.valueField !== null) {
-      return this.table.get(query).then(result => get(result, this.valueField, null))
+      return this.table.get(query).then(result => _.get(result, this.valueField, null))
     }
 
     // otherwise do a normal query, returning null instead of undefined.

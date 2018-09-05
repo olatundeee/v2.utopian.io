@@ -1,5 +1,5 @@
 // import lodash helpers.
-import { get, merge, toNumber } from 'lodash-es'
+import * as _ from 'lodash'
 import { slugify } from 'src/services/common/string'
 // base metadata fields.
 export const baseMetadata = {
@@ -8,7 +8,7 @@ export const baseMetadata = {
 }
 
 // metadata generator.
-export const generateMetadata = (meta, tags) => merge(merge(baseMetadata, { utopian: meta }), { tags })
+export const generateMetadata = (meta, tags) => _.merge(_.merge(baseMetadata, { utopian: meta }), { tags })
 
 export const generateOperations = (author, title, permlink = null, body = '', jsonMetadata = {}) => {
   // build comment data.
@@ -26,8 +26,8 @@ export const generateOperations = (author, title, permlink = null, body = '', js
 
   // get the beneficiary account name and percent.
   // defaults to the author.
-  const beneficiaryAccount = get(process.env, 'BENEFICIARY_ACCOUNT', author)
-  const beneficiaryPercent = toNumber(get(process.env, 'BENEFICIARY_PERCENT', '500'))
+  const beneficiaryAccount = _.get(process.env, 'BENEFICIARY_ACCOUNT', author)
+  const beneficiaryPercent = _.toNumber(_.get(process.env, 'BENEFICIARY_PERCENT', '500'))
 
   // build the beneficiaries array.
   const beneficiaries = [

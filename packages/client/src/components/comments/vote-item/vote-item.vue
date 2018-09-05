@@ -1,7 +1,7 @@
 <script>
 // imports.
 import { mapGetters } from 'vuex'
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 import { parseCurrencyString } from 'src/services/currencies/formatter'
 
 // post author component (author avatar box).
@@ -36,7 +36,7 @@ export default {
 
     // voter name.
     voter () {
-      return get(this.vote, 'voter', null)
+      return _.get(this.vote, 'voter', null)
     },
 
     // voter avatar.
@@ -46,7 +46,7 @@ export default {
 
     // vote reward shares.
     rewardShares () {
-      return parseInt(get(this.vote, 'rshares', 0))
+      return parseInt(_.get(this.vote, 'rshares', 0))
     },
 
     // calculates how much the vote is worth.

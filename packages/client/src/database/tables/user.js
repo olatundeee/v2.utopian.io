@@ -1,6 +1,6 @@
 // imports.
 import { user } from 'src/database'
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 import Table from 'src/database/tables/table'
 
 // export a table instance for the user settings table.
@@ -10,7 +10,7 @@ export const table = new Table('user', ['name'], 'value')
 export const all = () => user.toArray()
 
 // get an user stored value.
-export const find = (name) => user.get({ name }).then(record => get(record, 'value', null))
+export const find = (name) => user.get({ name }).then(record => _.get(record, 'value', null))
 
 // store an user value.
 export const save = (name, value = {}) => user.put({ name, value }).then(() => find(name))

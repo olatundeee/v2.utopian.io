@@ -1,13 +1,13 @@
 // imports.
 import { api } from 'src/services/steem/client'
 import { parseRewardFund } from './parsers/common/reward-fund'
-import { memoize } from 'lodash-es'
+import * as _ from 'lodash'
 
 // reward fund getter.
-export const getRewardFund = memoize(() => api.getRewardFundAsync('post').then(parseRewardFund))
+export const getRewardFund = _.memoize(() => api.getRewardFundAsync('post').then(parseRewardFund))
 
 // dynamic global properties getter.
-export const getDynamicGlobalProperties = memoize(() => api.getDynamicGlobalPropertiesAsync())
+export const getDynamicGlobalProperties = _.memoize(() => api.getDynamicGlobalPropertiesAsync())
 
 // current median history price getter.
-export const getMedianFeedPrice = memoize(() => api.getCurrentMedianHistoryPriceAsync())
+export const getMedianFeedPrice = _.memoize(() => api.getCurrentMedianHistoryPriceAsync())

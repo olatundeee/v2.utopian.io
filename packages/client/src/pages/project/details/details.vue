@@ -1,5 +1,5 @@
 <script>
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 import ULayoutPage from 'src/layouts/parts/page/page'
 import { render } from 'src/services/steem/markdown'
 
@@ -61,7 +61,7 @@ export default {
       }
     },
     isMobile () {
-      return get(this.$q, 'platform.is.mobile', false)
+      return _.get(this.$q, 'platform.is.mobile', false)
     }
   },
   created () {

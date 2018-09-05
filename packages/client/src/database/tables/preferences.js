@@ -1,12 +1,12 @@
 // imports.
 import { preferences } from 'src/database'
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 
 // all preferences.
 export const all = () => preferences.toArray()
 
 // find a given preference value.
-export const find = (name) => preferences.get({ name }).then(record => get(record, 'value', null))
+export const find = (name) => preferences.get({ name }).then(record => _.get(record, 'value', null))
 
 // save a given preference..
 export const save = (name, value = {}) => preferences.put({ name, value }).then(() => find(name))

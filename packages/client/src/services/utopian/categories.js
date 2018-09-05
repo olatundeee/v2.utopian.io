@@ -1,5 +1,5 @@
 // imports.
-import { map } from 'lodash-es'
+import * as _ from 'lodash'
 
 // export the categories.
 export const categories = [
@@ -28,4 +28,4 @@ export const tasks = [
 ]
 
 // map categories into selectable options array.
-export const categoryOptions = map(categories, (categoryName) => ({ value: categoryName, label: categoryName }))
+export const categoryOptions = _.map(categories, (categoryName) => ({ value: categoryName, label: categoryName }))

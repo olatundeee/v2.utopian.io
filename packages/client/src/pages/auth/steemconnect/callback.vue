@@ -3,7 +3,7 @@
 <!-- component script -->
 <script>
 // imports.
-import { get } from 'lodash-es'
+import * as _ from 'lodash'
 
 // auth callback component.
 export default {
@@ -15,7 +15,7 @@ export default {
   methods: {
     // parse oauth callback query.
     parseQuery () {
-      return this.$store.dispatch('auth/login', get(this.$route, 'query'))
+      return this.$store.dispatch('auth/login', _.get(this.$route, 'query'))
     }
   },
 

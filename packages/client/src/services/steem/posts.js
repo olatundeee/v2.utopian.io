@@ -2,7 +2,7 @@
 import { api } from 'src/services/steem/client'
 import { promisify } from 'src/services/common/promisify'
 import { parsePost } from './parsers/post'
-import { map, mapValues, get, each } from 'lodash-es'
+import * as _ from 'lodash'
 // import { parseAsHtml } from 'src/services/steem/parsers/markdown'
 
 const fixUsername = (author) => {
@@ -17,7 +17,7 @@ export const getContent = (author, permlink) => {
 const arrayToObject = (values) => {
   const result = {}
 
-  each(values, v => {
+  _.each(values, v => {
     result[v] = v
   })
 
@@ -25,8 +25,8 @@ const arrayToObject = (values) => {
 }
 
 export const nestComments = (comments, post) => {
-  return mapValues(arrayToObject(post.replies), (replyPermlink) => {
-    const reply = get(comments, replyPermlink)
+  return _.mapValues(arrayToObject(post.replies), (replyPermlink) => {
+    const reply = _.get(comments, replyPermlink)
     reply._replies = nestComments(comments, reply)
     return reply
   })
@@ -40,9 +40,9 @@ export const nestComments = (comments, post) => {
 
 export const getState = (author, permlink) => {
   return api.getStateAsync('utopian-io/' + author + '/' + permlink).then((response) => {
-    const comments = mapValues(response.content, parsePost)
-    response.content = mapValues(comments, (v) => v)
-    response.post = get(response.content, fixUsername(author) + '/' + permlink)
+    const comments = _.mapValues(response.content, parsePost)
+    response.content = _.mapValues(comments, (v) => v)
+    response.post = _.get(response.content, fixUsername(author) + '/' + permlink)
     response._replies = nestComments(comments, response.post)
     return response
   })
@@ -57,7 +57,7 @@ export const getReplies = (author, permlink) => {
 export const getBy = (method, query) => {
   const promiseGetter = promisify(method)
 
-  return promiseGetter(query).then((posts) => map(posts, parsePost))
+  return promiseGetter(query).then((posts) => _.map(posts, parsePost))
 }
 
 // load posts by created order.
@@ -75,9 +75,9 @@ export const byOrder = (order = 'trending', query, last = null) => {
   const getQuery = Object.assign({}, query)
 
   if (last) {
-    getQuery['start_author'] = get(last, 'author')
-    getQuery['start_permlink'] = get(last, 'permlink')
-    getQuery['limit'] = get(query, 'limit', 10) + 1
+    getQuery['start_author'] = _.get(last, 'author')
+    getQuery['start_permlink'] = _.get(last, 'permlink')
+    getQuery['limit'] = _.get(query, 'limit', 10) + 1
   }
 
   const method = order === 'trending' ? byTrending : byCreated
@@ -91,7 +91,7 @@ export const byOrder = (order = 'trending', query, last = null) => {
 }
 
 export const byAuthor = ({ author, startPermlink = '', beforeDate = new Date().toJSON().substr(0, 19), limit = 20 }) => {
-  return api.getDiscussionsByAuthorBeforeDateAsync(author, startPermlink, beforeDate, limit).then((posts) => map(posts, parsePost))
+  return api.getDiscussionsByAuthorBeforeDateAsync(author, startPermlink, beforeDate, limit).then((posts) => _.map(posts, parsePost))
 }
 
 // default export.

@@ -1,5 +1,5 @@
 // imports.
-import { flow } from 'lodash-es'
+import * as _ from 'lodash'
 // replace maker.
 const replace = (expression, replacement = '') => (input) => (input.replace(expression, replacement))
 // remove HTML tags.
@@ -19,7 +19,7 @@ const removeURLs = replace(/[-a-zA-Z0-9@:%_+.~#?&/=]{2,256}\.[a-z]{2,4}\b(\/[-a-
 const options = {
   // apply the text filter to elements.
   textFilter (text) {
-    return flow([
+    return _.flow([
       removeHTMLTags,
       removeHTMLEntities,
       removeListsAndHeaders,

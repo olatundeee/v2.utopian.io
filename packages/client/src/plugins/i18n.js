@@ -2,7 +2,7 @@
 import { Quasar } from 'quasar'
 import VueI18n from 'vue-i18n'
 import moment from 'moment'
-import { toString } from 'lodash-es'
+import * as _ from 'lodash'
 import messages from 'src/i18n'
 import { find, save } from 'src/database/tables/preferences'
 
@@ -10,7 +10,7 @@ import { find, save } from 'src/database/tables/preferences'
 export const enabledLocales = ['en-us', 'pt-br', 'pt']
 
 // guess the locale code.
-const guessLocale = (fallback = 'en') => toString(Quasar.i18n.getLocale() || fallback)
+const guessLocale = (fallback = 'en') => _.toString(Quasar.i18n.getLocale() || fallback)
 
 // get the locale from preferences.
 export const getLocale = async () => {

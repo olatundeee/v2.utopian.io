@@ -4,7 +4,7 @@ import moment from 'moment'
 import UPostPreview from 'src/components/post-preview/post-preview'
 import ULayoutPage from 'src/layouts/parts/page/page'
 import { categories, categoryOptions } from 'src/services/utopian/categories'
-import { map, concat, get, last, filter, attempt, debounce } from 'lodash-es'
+import * as _ from 'lodash'
 
 export default {
   name: 'PageProjectTasks',
@@ -38,20 +38,20 @@ export default {
         return result
       })
     },
-    loadPostsScroll: debounce(function (index, done) {
+    loadPostsScroll: _.debounce(function (index, done) {
       return this.loadPosts(done)
     }, 3000),
     loadPosts (done) {
-      const order = get(this.$route, 'meta.order', 'trending')
-      const tag = get(this.$route, 'params.category', 'utopian-io')
-      return byOrder(order, { tag, limit: 40 }, last(this.posts))
+      const order = _.get(this.$route, 'meta.order', 'trending')
+      const tag = _.get(this.$route, 'params.category', 'utopian-io')
+      return byOrder(order, { tag, limit: 40 }, _.last(this.posts))
         .then((result) => {
-          this.posts = concat(this.posts, result)
+          this.posts = _.concat(this.posts, result)
           if (result.length < 40) {
-            attempt(done)
+            _.attempt(done)
             this.$refs.infiniteScroll.stop()
           } else {
-            attempt(done)
+            _.attempt(done)
           }
           return result
         })
@@ -62,21 +62,21 @@ export default {
       return categories
     },
     categoryOptions () {
-      return map(categoryOptions, (option) => {
+      return _.map(categoryOptions, (option) => {
         option.label = option.label.toUpperCase()
         return option
       })
     },
     currentCategory () {
-      return get(this.$route, 'params.category', null)
+      return _.get(this.$route, 'params.category', null)
     },
     visiblePosts () {
-      return filter(this.posts, (post) => ((post['parent_permlink'] === 'utopian-io')))
+      return _.filter(this.posts, (post) => ((post['parent_permlink'] === 'utopian-io')))
     }
   },
   mounted () {
-    this.sortBy = get(this.$route, 'meta.order', 'trending')
-    this.category = get(this.$route, 'params.category', 'utopian-io')
+    this.sortBy = _.get(this.$route, 'meta.order', 'trending')
+    this.category = _.get(this.$route, 'params.category', 'utopian-io')
 
     this.loadInitial()
     return true

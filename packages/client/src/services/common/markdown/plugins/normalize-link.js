@@ -1,5 +1,5 @@
 // imports.
-import { attempt } from 'lodash-es'
+import * as _ from 'lodash'
 import mdurl from 'mdurl'
 import punycode from 'punycode/punycode.es6'
 
@@ -12,7 +12,7 @@ const allowedProtocols = [ 'http:', 'https:' ]
 // normalize link function.
 const normalizeLink = (url) => {
   // parse the link.
-  let parsed = attempt(mdurl.parse, url, true) || null
+  let parsed = _.attempt(mdurl.parse, url, true) || null
 
   // if null, without protocol or without hostname...
   if (!parsed || !parsed.protocol || !parsed.hostname) {
@@ -27,7 +27,7 @@ const normalizeLink = (url) => {
   }
 
   // re-encode the hostname.
-  parsed.hostname = attempt(() => punycode.toASCII(parsed.hostname)) || null
+  parsed.hostname = _.attempt(() => punycode.toASCII(parsed.hostname)) || null
 
   // return the encoded, normalized URL.
   return mdurl.encode(mdurl.format(parsed))

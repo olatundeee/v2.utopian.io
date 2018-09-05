@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import ULayoutPage from 'src/layouts/parts/page/page'
-import { filter, debounce, uniqBy, attempt, last, concat } from 'lodash-es'
+import * as _ from 'lodash'
 import { format } from 'quasar'
 
 const { capitalize } = format
@@ -47,10 +47,10 @@ export default {
         }
       }
     },
-    loadUsersScroll: debounce(function (index, done) {
+    loadUsersScroll: _.debounce(function (index, done) {
       const username = this.$route.params['username']
       const vm = this
-      const lastUser = last(this[this.route])
+      const lastUser = _.last(this[this.route])
 
       return this[`load${capitalize(this.route)}`]({
         username,
@@ -60,16 +60,16 @@ export default {
         const allFollowers = vm[`user${capitalize(vm.route)}`]()(username)
         const newFollowers = allFollowers.slice(vm[vm.route].length, allFollowers.length)
         
-        vm[vm.route] = concat(vm[vm.route], newFollowers)
+        vm[vm.route] = _.concat(vm[vm.route], newFollowers)
         if (newFollowers.length < 40) {
-          attempt(done)
+          _.attempt(done)
           vm.$refs.infiniteScroll.stop()
         } else {
-          attempt(done)
+          _.attempt(done)
         }
         return newFollowers
       }).catch((err) => {
-        attempt(done)
+        _.attempt(done)
         throw err
       })
     }, 3000),
@@ -92,7 +92,7 @@ export default {
       return this.$route.path.split('/').pop()
     },
     visiblePosts () {
-      return uniqBy(filter(this.posts, (post) => ((post['parent_permlink'] === 'utopian-io'))), 'permlink')
+      return _.uniqBy(_.filter(this.posts, (post) => ((post['parent_permlink'] === 'utopian-io'))), 'permlink')
     }
   },
   mounted () {

@@ -2,7 +2,7 @@
 <script>
 // imports.
 import moment from 'moment'
-import { map, get, filter, debounce, attempt } from 'lodash-es'
+import * as _ from 'lodash'
 import UPostPreview from 'src/components/post-preview/post-preview'
 import ULayoutPage from 'src/layouts/parts/page/page'
 import { categories, categoryOptions } from 'src/services/utopian/categories'
@@ -66,7 +66,7 @@ export default {
     },
 
     // debounced post loading (paginated).
-    loadProjectsScroll: debounce(function (index, done) {
+    loadProjectsScroll: _.debounce(function (index, done) {
       return this.loadProjects(done)
     }, 3000),
 
@@ -75,10 +75,10 @@ export default {
       const listProjects = firebase.functions().httpsCallable(`api/projects/list?q=${this.search}&openSource=${this.opensource}`)
       this.projects = (await listProjects()).data
       if (this.projects.length < 10) {
-        attempt(done)
+        _.attempt(done)
         this.$refs.infiniteScroll.stop()
       } else {
-        attempt(done)
+        _.attempt(done)
       }
     },
     getProjectImage (project) {
@@ -107,7 +107,7 @@ export default {
 
     // map the categories into a selectable array.
     categoryOptions () {
-      return map(categoryOptions, (option) => {
+      return _.map(categoryOptions, (option) => {
         // @TODO upper case should be handler at CSS level, not runtime transformations.
         option.label = option.label.toUpperCase()
         return option
@@ -116,20 +116,20 @@ export default {
 
     // currently selected category filter.
     currentCategory () {
-      return get(this.$route, 'params.category', null)
+      return _.get(this.$route, 'params.category', null)
     },
 
     // filter utopian-only posts.
     visiblePosts () {
-      return filter(this.posts, (post) => ((post['parent_permlink'] === 'utopian-io')))
+      return _.filter(this.posts, (post) => ((post['parent_permlink'] === 'utopian-io')))
     }
   },
 
   // mounted hook.
   mounted () {
     // start sort and category from route, defaulting to trending, all categories.
-    this.sortBy = get(this.$route, 'meta.order', 'trending')
-    this.category = get(this.$route, 'params.category', 'utopian-io')
+    this.sortBy = _.get(this.$route, 'meta.order', 'trending')
+    this.category = _.get(this.$route, 'params.category', 'utopian-io')
 
     // load initial content.
     this.loadInitial()

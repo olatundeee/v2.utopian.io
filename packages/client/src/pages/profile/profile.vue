@@ -3,7 +3,7 @@ import ULayoutPage from 'src/layouts/parts/page/page'
 import UPostPreview from 'src/components/post-preview/post-preview'
 import { byOrder } from 'src/services/steem/posts'
 import { getFollowCount } from 'src/services/steem/account'
-import { concat, last, attempt, get } from 'lodash-es'
+import * as _ from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -44,9 +44,9 @@ export default {
     }),
     factoryProfile (data) {
       // extract meta information.
-      const meta = JSON.parse(get(data, 'json_metadata', '{}') || '{}')
+      const meta = JSON.parse(_.get(data, 'json_metadata', '{}') || '{}')
       // extract profile from meta.
-      const profile = get(meta, 'profile', {})
+      const profile = _.get(meta, 'profile', {})
       // assign avatar field on the profile.
       profile.avatar = 'https://steemitimages.com/u/' + data.name + '/avatar'
       // return the prepared object.
@@ -66,10 +66,10 @@ export default {
       }
     },
     loadContributions (done) {
-      return byOrder('trending', { tag: 'utopian-io', limit: 10 }, last(this.posts))
+      return byOrder('trending', { tag: 'utopian-io', limit: 10 }, _.last(this.posts))
         .then((result) => {
-          this.contributions = concat(this.contributions, result)
-          attempt(done)
+          this.contributions = _.concat(this.contributions, result)
+          _.attempt(done)
           return result
         })
     },

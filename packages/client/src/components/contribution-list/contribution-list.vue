@@ -2,7 +2,7 @@
 <script>
 // imports.
 import moment from 'moment'
-import { attempt, debounce, last, concat } from 'lodash-es'
+import * as _ from 'lodash'
 import { mapActions } from 'vuex'
 import UPostPreview from 'src/components/post-preview/post-preview'
 
@@ -90,8 +90,8 @@ export default {
       })
     },
 
-    // debounced post loading (paginated).
-    loadPostsScroll: debounce(function (index, done) {
+    // _.debounced post loading (paginated).
+    loadPostsScroll: _.debounce(function (index, done) {
       return this.loadPosts(done)
     }, 2000),
 
@@ -104,21 +104,21 @@ export default {
       const orderBy = this.orderBy
 
       const post = this.posts.length > 0
-        ? last(this.posts) : {}
+        ? _.last(this.posts) : {}
 
       try {
         const result = await this.getContributions({ query, orderBy, limit, post })
-        this.posts = concat(this.posts, result)
+        this.posts = _.concat(this.posts, result)
         // small hack top prevent infinite loop.
         if (result.length < limit) {
-          attempt(done)
+          _.attempt(done)
           this.stopScroll()
         } else {
-          attempt(done)
+          _.attempt(done)
         }
       } catch (err) {
         console.error(err)
-        attempt(done)
+        _.attempt(done)
         this.stopScroll()
       }
     },

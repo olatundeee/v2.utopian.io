@@ -5,7 +5,7 @@ import UCommentsAuthorHeader from 'src/components/comments/author-header/author-
 import UCommentsVoteItem from 'src/components/comments/vote-item/vote-item'
 import UPostAuthor from 'src/components/posts/author/author'
 import UPostReply from 'src/components/posts/reply/reply'
-import { map, get, orderBy } from 'lodash-es'
+import * as _ from 'lodash'
 import UCommentsActions from 'src/components/comments/actions/actions'
 import { render } from 'src/services/steem/markdown'
 
@@ -35,8 +35,8 @@ export default {
   methods: {
 
     loadContent () {
-      this.author = get(this.$route, 'params.author', null)
-      this.permlink = get(this.$route, 'params.permlink', null)
+      this.author = _.get(this.$route, 'params.author', null)
+      this.permlink = _.get(this.$route, 'params.permlink', null)
 
       return getState(this.author, this.permlink)
         .then((result) => {
@@ -47,7 +47,7 @@ export default {
           return result
         })
         .then((result) => {
-          return render(get(this.post, 'body', ''))
+          return render(_.get(this.post, 'body', ''))
             .then((data) => {
               this.postBody = data
               return data
@@ -59,16 +59,16 @@ export default {
   computed: {
 
     sortedReplies () {
-      return orderBy(this.replies, ['_author_reputation'], ['desc'])
+      return _.orderBy(this.replies, ['_author_reputation'], ['desc'])
     },
 
     activeVotes () {
-      const votes = map(get(this.post, 'active_votes', [], (vote) => {
+      const votes = _.map(_.get(this.post, 'active_votes', [], (vote) => {
         vote.rshares = parseInt(vote.rshares)
         vote.order = vote.weight * vote.percent
         return vote
       }))
-      return orderBy(votes, ['order'], ['desc'])
+      return _.orderBy(votes, ['order'], ['desc'])
     }
   },
   mounted () {
