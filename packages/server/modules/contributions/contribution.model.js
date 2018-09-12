@@ -12,7 +12,7 @@ const contributions = new Schema({
   votes: [{ type: Object }], // this will be an array of votes when we create the vote model
   url: { type: String, required: true },
   author: { type: String, required: true, ref: 'Users' },
-  pendingPayoutValue: { type: String, required: true },
+  pendingPayoutValue: { type: Number, default: 0 },
   repositories: [{
     _id: false,
     type: {
