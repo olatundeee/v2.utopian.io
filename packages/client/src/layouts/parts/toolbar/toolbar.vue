@@ -25,7 +25,7 @@ export default {
       'linkSteemAccount'
     ]),
     startGithubLogin () {
-      window.location = `https://github.com/login/oauth/authorize?scope=read:user,repo&client_id=${process.env.GITHUB_CLIENT_ID}&state=githublogin`
+      window.location = `https://github.com/login/oauth/authorize?scope=read:user,repo&client_id=${process.env.GITHUB_CLIENT_ID}&state=githublogin:https://github.com/utopian-io/v2.utopian.io/issues/27#issue-342078116`
     },
     startSteemConnectLogin () {
       let callbackURL = ''

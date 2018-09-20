@@ -19,7 +19,15 @@ export default async ({ currentRoute, store, redirect, ssrContext }) => {
   const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
 
   // Login with any external provider
-  const loginState = currentRoute.query.state
+  const state = currentRoute.query.state
+  let loginState = state
+  let extraParemeter = ''
+
+  if (loginState && loginState.split('githublogin').length > 1) {
+    extraParemeter = loginState.split('githublogin:')[1]
+    loginState = 'githublogin'
+  }
+  
   if (loginState === 'githublogin') {
     await gitHubLogin({ currentRoute, store, redirect, ssrContext })
   } else {
@@ -35,6 +43,11 @@ export default async ({ currentRoute, store, redirect, ssrContext }) => {
   // Link blockchain accounts
   if (loginState === 'steemconnectlogin') {
     await linkSteemAccount({ currentRoute, store })
+  }
+
+  // state = 'redirect=${githubLink}
+  if (extraParemeter) {
+    redirect(extraParemeter)
   }
 
   // Load the user information
