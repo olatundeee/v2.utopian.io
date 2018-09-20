@@ -107,7 +107,7 @@ export default {
       try {
         await this.saveUser({ username: this.user.username })
         this.stopLoading()
-        this.$router.push({ name: 'home' })
+        window.location = `/?state=${this.$route.query.state}`
       } catch (err) {
         this.stopLoading()
         this.showDialog({ title: 'Oops :(', message: 'We couldn\'t create your account. Please try again.' })
