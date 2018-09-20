@@ -2,7 +2,7 @@ const Mongoose = require('mongoose')
 
 const Schema = Mongoose.Schema
 
-const activity = new Schema({
+const activities = new Schema({
   type: { type: String, required: true, enum: ['SEND_TIP', 'REDEEM_TIP', 'REFUND_TIP', 'WITHDRAW', 'WITHDRAW_PROCESSED', 'LOAD_BALANCE'] },
   account: { type: String, required: true },
   amount: { type: Number, required: true },
@@ -12,4 +12,4 @@ const activity = new Schema({
   tip_id: { type: String }
 })
 
-module.exports = Mongoose.model('Activity', activity, 'activity')
+module.exports = Mongoose.model('Activities', activities, 'activities')

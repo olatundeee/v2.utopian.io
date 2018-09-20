@@ -1,5 +1,6 @@
 const Boom = require('boom')
 const Activity = require('./activity.model')
+const User = require('../users/user.model')
 
 const redeemTip = async (req, h) => {
   const data = await Activity.findById(req.payload.id)
@@ -9,7 +10,22 @@ const redeemTip = async (req, h) => {
 }
 
 const getBalance = async (req, h) => {
+  const githubUser = (await User.findOne({ username: req.auth.credentials.username, 'authProviders.type': 'github' })
+    .select('authProviders')).authProviders[0].username
+  let balance = 0
 
+  const activities = await Activity.find({ $or: [{ 'metadata.sender': githubUser }, { 'metadata.receiver': githubUser }] }).sort('createdAt')
+  activities.forEach((activity) => {
+    if (activity.type === 'send_tip' && activity.metadata.sender === githubUser) {
+      balance -= activity.amount
+    } else if (activity.type === 'redeem_tip' && activity.metadata.receiver === githubUser) {
+      balance += activity.amount
+    } else if (activity.type === 'refund_tip' && activity.metadata.sender === githubUser) {
+      balance += activity.amount
+    }
+  })
+
+  return balance
 }
 
 const getTips = async (req, h) => {
