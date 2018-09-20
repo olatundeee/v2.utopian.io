@@ -27,7 +27,7 @@ export default async ({ currentRoute, store, redirect, ssrContext }) => {
     })
 
     if (!token.username) {
-      redirect('/users/create')
+      redirect(`/users/create?state=${currentRoute.query.state}`)
     }
   }
 }

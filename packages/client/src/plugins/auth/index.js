@@ -44,6 +44,11 @@ export default async ({ currentRoute, store, redirect, ssrContext }) => {
   if (loginState === 'steemconnectlogin') {
     await linkSteemAccount({ currentRoute, store })
   }
+  console.log(currentRoute)
+  // state = 'redirect=${githubLink}
+  if (extraParemeter && currentRoute.path === '/') {
+    redirect(extraParemeter)
+  }
 
   // state = 'redirect=${githubLink}
   if (extraParemeter) {
