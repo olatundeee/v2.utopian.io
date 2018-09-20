@@ -34,16 +34,15 @@ const getTips = async (req, h) => {
 }
 
 const getActivities = async (req, h) => {
-  const { sort = 'DESC', filter = null, limit = 20, skip = 0 } = req.params
+  let { sort = 'DESC', filter, limit = 20, skip = 0 } = req.params
+  sort = sort === 'DESC' ? '-createdAt' : '+createdAt'
   let data
-  if (filter === null) {
-    data = await Activity.find({ account: req.auth.credentials.username }).limit(limit).skip(skip)
-  } else if (sort === 'DESC') {
-    data = await Activity.find({ account: req.auth.credentials.username }).limit(limit).skip(skip)
-  } else if (sort === 'ASC') {
-
+  if (typeof filter === 'undefined') {
+    data = await Activity.find({ account: req.auth.credentials.username }).limit(limit).skip(skip).sort(sort)
+    return h.response({ 'total': data.length, 'results': data })
   }
 
+  data = await Activity.find({ account: req.auth.credentials.username, type: filter }).limit(limit).skip(skip).sort(sort)
   return h.response({ 'total': data.length, 'results': data })
 }
 
