@@ -7,10 +7,10 @@ div
       q-field(label="Project name*", orientation="vertical", :error="$v.project.name.$error")
         q-input(v-model.trim="project.name", placeholder="e.g DTube", @keyup.enter="submit", @blur="updateFormPercentage('name')")
 
-      q-field(label="Github Repository", orientation="vertical", :error="$v.project.platforms.$error")
-        q-search(v-model="project.platforms.github.repository", placeholder="e.g dtube/dtube", icon="mdi-github-circle", :disable="project.closedSource", @blur="updateFormPercentage('platforms')")
+      q-field(label="Github Repository", orientation="vertical", :error="$v.project.repository.$error")
+        q-search(v-model="project.repository", placeholder="e.g dtube/dtube", icon="mdi-github-circle", :disable="project.closedSource", @blur="updateFormPercentage('repository')")
           q-autocomplete(@search="searchGithubRepositoryWrapper", :min-characters="3", :debounce="500", separator, value-field="label")
-        q-checkbox(v-model.boolean="project.closedSource", label="My project is not Open Source", left-label, @blur="updateFormPercentage('platforms')")
+        q-checkbox(v-model.boolean="project.closedSource", label="My project is not Open Source", left-label, @input="updateFormPercentage('repository')")
 
       q-field(label="Web page", orientation="vertical", :error="$v.project.website.$error")
         q-input(v-model="project.website", placeholder="https://d.tube", @keyup.enter="submit", @blur="updateFormPercentage('website')")

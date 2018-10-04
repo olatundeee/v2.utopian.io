@@ -18,11 +18,7 @@ export default {
       project: {
         name: '',
         closedSource: false,
-        platforms: {
-          github: {
-            repository: ''
-          }
-        },
+        repository: '',
         website: '',
         docs: '',
         license: '',
@@ -35,12 +31,8 @@ export default {
   validations: {
     project: {
       name: {required},
-      platforms: {
-        github: {
-          repository: {
-            required: requiredUnless(function () { return this.project.closedSource })
-          }
-        }
+      repository: {
+        required: requiredUnless(function () { return this.project.closedSource })
       },
       website: {url},
       docs: {url},
@@ -79,14 +71,17 @@ export default {
       this.$v.project[field].$touch()
       const fields = Object.keys(this.$v.project.$params)
       const completed = fields.reduce((count, key) => {
-        console.log(key, this.project[key] !== '')
-        return this.project[key] !== '' && !(this.$v.project[key].$invalid || this.$v.project[key].$error) ? count + 1 : count
+        if (this.$v.project[key].$error) return count
+        if (key === 'repository' && this.project.closedSource) return count + 1
+        if (typeof this.project[key] === 'string' && this.project[key] !== '') return count + 1
+        if (Array.isArray(this.project[key]) && this.project[key].length > 0) return count + 1
+        return count
       }, 0)
       this.formPercentage = Math.round(completed / fields.length * 100)
     },
     async submit () {
       this.$v.project.$touch()
-      if (this.$v.project.$error) {
+      if (this.$v.project.$invalid) {
         return
       }
       if (this.project.platforms.github.repository && !this.isAllowed) {
