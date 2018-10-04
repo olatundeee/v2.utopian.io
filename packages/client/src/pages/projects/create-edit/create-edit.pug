@@ -7,8 +7,8 @@ div
       q-field(:label="`${$t('project.crud.project_name')}*`", orientation="vertical", :error="$v.project.name.$error")
         q-input(v-model.trim="project.name", placeholder="Quasar framework", @keyup.enter="submit", @blur="updateFormPercentage('name')")
 
-      q-field(:label="`${$t('project.crud.repository')}${project.closedSource ? '' : '*'}`", orientation="vertical", :error="$v.project.repository.$error")
-        q-search(v-model="project.repository", placeholder="https://github.com/quasarframework/quasar", icon="mdi-github-circle", :disable="project.closedSource", @blur="updateFormPercentage('repository')")
+      q-field(:label="`${$t('project.crud.repositories')}${project.closedSource ? '' : '*'}`", orientation="vertical", :error="$v.project.repositories.$error")
+        q-search(v-model="project.repositories", placeholder="https://github.com/quasarframework/quasar", icon="mdi-github-circle", :disable="project.closedSource", @blur="updateFormPercentage('repositories')")
           q-autocomplete(@search="searchGithubRepositoryWrapper", :min-characters="3", :debounce="500", separator, value-field="label")
         q-checkbox(v-model.boolean="project.closedSource", :label="$t('project.crud.not_opensource')", left-label, @input="updateFormPercentage('repository')")
 

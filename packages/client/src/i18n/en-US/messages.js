@@ -51,7 +51,7 @@ export default {
       project_name: 'Project name',
       project_tags: 'Project tags',
       project_tags_help: 'Please provide at least 3 tags',
-      repository: 'Repository',
+      repositories: 'Repositories',
       save: 'Save',
       short_description: 'Short description',
       short_description_help: 'Give people a sense about your project…',

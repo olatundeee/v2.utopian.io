@@ -18,7 +18,7 @@ export default {
       project: {
         name: '',
         closedSource: false,
-        repository: '',
+        repositories: [],
         website: '',
         docs: '',
         license: '',
@@ -32,7 +32,7 @@ export default {
   validations: {
     project: {
       name: {required},
-      repository: {
+      repositories: {
         required: requiredUnless(function () { return this.project.closedSource })
       },
       website: {url},
