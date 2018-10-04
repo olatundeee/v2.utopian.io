@@ -1,0 +1,32 @@
+@import "~variables"
+.project-form-container {
+  margin-top 20px
+  .q-page-sticky {
+    > span {
+      width 100%
+    }
+  }
+  .create-edit-project-progress {
+    margin-top 28px
+    @media (max-width $breakpoint-sm-max) {
+      margin-top 0
+    }
+    .q-list-header {
+      text-align right
+      text-transform uppercase
+      color #9d9d9d
+      font-family 'Noto Sans', sans-serif
+      padding-bottom 0
+      font-size 12px
+      min-height 12px
+      line-height 12px
+    }
+    .q-progress {
+      border-radius 5px
+      margin-bottom 20px
+    }
+    button {
+      margin-top 8px
+    }
+  }
+}

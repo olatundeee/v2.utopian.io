@@ -1,0 +1,41 @@
+div
+  h3 Bring your project to Utopian.io
+  h4 Make a great first impression with all the project information filled and great images about your project.
+
+  div.row.gutter-sm.project-form-container
+    div.col-md-8.col-sm-12.col-xs-12
+      q-field(label="Project name*", orientation="vertical", :error="$v.project.name.$error")
+        q-input(v-model.trim="project.name", placeholder="e.g DTube", @keyup.enter="submit", @blur="updateFormPercentage('name')")
+
+      q-field(label="Github Repository", orientation="vertical", :error="$v.project.platforms.$error")
+        q-search(v-model="project.platforms.github.repository", placeholder="e.g dtube/dtube", icon="mdi-github-circle", :disable="project.closedSource", @blur="updateFormPercentage('platforms')")
+          q-autocomplete(@search="searchGithubRepositoryWrapper", :min-characters="3", :debounce="500", separator, value-field="label")
+        q-checkbox(v-model.boolean="project.closedSource", label="My project is not Open Source", left-label, @blur="updateFormPercentage('platforms')")
+
+      q-field(label="Web page", orientation="vertical", :error="$v.project.website.$error")
+        q-input(v-model="project.website", placeholder="https://d.tube", @keyup.enter="submit", @blur="updateFormPercentage('website')")
+
+      q-field(label="Documentation page", orientation="vertical", :error="$v.project.docs.$error")
+        q-input(v-model="project.docs", placeholder="https://docs.d.tube", @keyup.enter="submit", @blur="updateFormPercentage('docs')")
+
+      q-field(label="License*", orientation="vertical", :error="$v.project.license.$error")
+        q-select(v-model="project.license", placeholder="MIT", :options="licenses", :before="[{ icon: 'mdi-file-outline' }]", filter, autofocus-filter, @blur="updateFormPercentage('license')")
+
+      q-field(label="Project Image*", orientation="vertical", :error="$v.project.images.$error")
+        u-file-uploader(@upload="handleImageUpload")
+
+      q-field(label="Short description*", :count="250", orientation="vertical", :error="$v.project.description.$error")
+        q-input(v-model="project.description", placeholder="Give people a sense about your project…", type="textarea", maxlength="250", :max-height="150", rows="7", @keyup.enter="submit" @blur="updateFormPercentage('description')")
+
+      q-field(label="Project Tags*", orientation="vertical", helper="Please type at least 3 tags", :error="$v.project.tags.$error")
+        q-chips-input(v-model="project.tags", placeholder="e.g: video, decentralized, ipfs", clearable, @blur="updateFormPercentage('tags')")
+
+    div.col-md-4.col-sm-12.col-xs-12
+      q-list(separator).create-edit-project-progress
+        q-list-header {{ formPercentage }}% completed
+        q-item
+          q-item-main
+            q-progress(:percentage="formPercentage", height="10px")
+        q-item
+          q-item-main
+            q-btn.full-width(color="primary", label="Save", @click="submit")

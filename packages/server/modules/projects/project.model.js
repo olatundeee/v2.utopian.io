@@ -12,7 +12,7 @@ const projects = new Schema({
   featured: { type: Boolean, default: false },
   featured_order: { type: Number, default: null },
   tags: { type: Array, required: true },
-  openSource: { type: Boolean, required: true, default: true },
+  closedSource: { type: Boolean, required: true, default: false },
   platforms: { type: Object },
   slug: { type: String, required: true, unique: true },
   website: { type: String },

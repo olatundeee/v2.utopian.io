@@ -8,3 +8,7 @@ export const getFeaturedProjects = async (context) => {
   })
   context.commit('setFeaturedProjects', payload)
 }
+
+export const saveProject = async (context, payload) => {
+  console.log(payload)
+}
