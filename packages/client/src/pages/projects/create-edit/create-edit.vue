@@ -13,6 +13,7 @@ export default {
   },
   data () {
     return {
+      fixedProgress: false,
       formPercentage: 0,
       project: {
         name: '',
@@ -64,6 +65,9 @@ export default {
     ...mapActions({
       saveProject: 'projects/saveProject'
     }),
+    scrollHandler ({ position }) {
+      this.fixedProgress = position > 120
+    },
     searchGithubRepositoryWrapper (query, done) {
       this.searchGithubRepository(query).then(done)
     },

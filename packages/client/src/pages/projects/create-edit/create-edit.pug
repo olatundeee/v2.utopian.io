@@ -31,7 +31,8 @@ div
         q-chips-input(v-model="project.tags", placeholder="e.g: video, decentralized, ipfs", clearable, @blur="updateFormPercentage('tags')")
 
     div.col-md-4.col-sm-12.col-xs-12
-      q-list(separator).create-edit-project-progress
+      q-scroll-observable(@scroll="scrollHandler")
+      q-list(separator, :class="fixedProgress ? 'fixed' : ''").create-edit-project-progress
         q-list-header {{ formPercentage }}% completed
         q-item
           q-item-main
