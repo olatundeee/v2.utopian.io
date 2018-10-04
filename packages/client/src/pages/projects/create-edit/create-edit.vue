@@ -24,7 +24,7 @@ export default {
         license: '',
         medias: [],
         description: '',
-        details: 'Write everything about your project…',
+        details: '',
         tags: []
       }
     }

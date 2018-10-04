@@ -1,43 +1,43 @@
 div
-  h3 Bring your project to Utopian.io
-  h4 Make a great first impression with all the project information filled and great images about your project.
+  h3 {{$t('project.crud.title')}}
+  h4 {{$t('project.crud.subtitle')}}
 
   div.row.gutter-sm.project-form-container
     div.col-md-8.col-sm-12.col-xs-12
-      q-field(label="Name*", orientation="vertical", :error="$v.project.name.$error")
-        q-input(v-model.trim="project.name", placeholder="e.g DTube", @keyup.enter="submit", @blur="updateFormPercentage('name')")
+      q-field(:label="`${$t('project.crud.project_name')}*`", orientation="vertical", :error="$v.project.name.$error")
+        q-input(v-model.trim="project.name", placeholder="Quasar framework", @keyup.enter="submit", @blur="updateFormPercentage('name')")
 
-      q-field(:label="`Repository${project.closedSource ? '' : '*'}`", orientation="vertical", :error="$v.project.repository.$error")
-        q-search(v-model="project.repository", placeholder="e.g dtube/dtube", icon="mdi-github-circle", :disable="project.closedSource", @blur="updateFormPercentage('repository')")
+      q-field(:label="`${$t('project.crud.repository')}${project.closedSource ? '' : '*'}`", orientation="vertical", :error="$v.project.repository.$error")
+        q-search(v-model="project.repository", placeholder="https://github.com/quasarframework/quasar", icon="mdi-github-circle", :disable="project.closedSource", @blur="updateFormPercentage('repository')")
           q-autocomplete(@search="searchGithubRepositoryWrapper", :min-characters="3", :debounce="500", separator, value-field="label")
-        q-checkbox(v-model.boolean="project.closedSource", label="My project is not Open Source", left-label, @input="updateFormPercentage('repository')")
+        q-checkbox(v-model.boolean="project.closedSource", :label="$t('project.crud.not_opensource')", left-label, @input="updateFormPercentage('repository')")
 
-      q-field(label="Web page", orientation="vertical", :error="$v.project.website.$error")
-        q-input(v-model="project.website", placeholder="https://d.tube", @keyup.enter="submit", @blur="updateFormPercentage('website')")
+      q-field(:label="$t('project.crud.web_page')", orientation="vertical", :error="$v.project.website.$error")
+        q-input(v-model="project.website", placeholder="https://quasar-framework.org", @keyup.enter="submit", @blur="updateFormPercentage('website')")
 
-      q-field(label="Documentation page", orientation="vertical", :error="$v.project.docs.$error")
-        q-input(v-model="project.docs", placeholder="https://docs.d.tube", @keyup.enter="submit", @blur="updateFormPercentage('docs')")
+      q-field(:label="$t('project.crud.documentation_page')", orientation="vertical", :error="$v.project.docs.$error")
+        q-input(v-model="project.docs", placeholder="https://quasar-framework.org/guide", @keyup.enter="submit", @blur="updateFormPercentage('docs')")
 
-      q-field(label="License*", orientation="vertical", :error="$v.project.license.$error")
+      q-field(:label="`${$t('project.crud.license')}*`", orientation="vertical", :error="$v.project.license.$error")
         q-select(v-model="project.license", placeholder="MIT", :options="licenses", :before="[{ icon: 'mdi-file-outline' }]", filter, autofocus-filter, @blur="updateFormPercentage('license')")
 
-      q-field(label="Images*", orientation="vertical", :error="$v.project.medias.$error")
-        q-uploader(ref="uploader", url="http://localhost:5000/api", auto-expand, multiple, hide-upload-button, extensions=".jpg,.jpeg,.png", @add="updateFormPercentage('medias')", @remove:cancel="updateFormPercentage('medias')")
+      q-field(:label="`${$t('project.crud.images')}*`", orientation="vertical", :error="$v.project.medias.$error")
+        q-uploader(ref="uploader", url="http://TODO", auto-expand, multiple, hide-upload-button, extensions=".jpg,.jpeg,.png", @add="updateFormPercentage('medias')", @remove:cancel="updateFormPercentage('medias')")
 
-      q-field(label="Short description*", :count="250", orientation="vertical", :error="$v.project.description.$error")
-        q-input(v-model="project.description", placeholder="Give people a sense about your project…", type="textarea", maxlength="250", :max-height="150", rows="7", @keyup.enter="submit" @blur="updateFormPercentage('description')")
-      q-field(label="Details*", orientation="vertical", :error="$v.project.details.$error")
-        u-wysiwyg(v-model="project.details", :blur="updateFormPercentage('details')")
-      q-field(label="Tags*", orientation="vertical", helper="Please provide at least 3 tags", :error="$v.project.tags.$error")
-        q-chips-input(v-model="project.tags", placeholder="e.g: video, decentralized, ipfs", clearable, @blur="updateFormPercentage('tags')")
+      q-field(:label="`${$t('project.crud.short_description')}*`", :count="250", orientation="vertical", :error="$v.project.description.$error")
+        q-input(v-model="project.description", :placeholder="$t('project.crud.short_description_help')", type="textarea", maxlength="250", :max-height="150", rows="7", @keyup.enter="submit" @blur="updateFormPercentage('description')")
+      q-field(:label="`${$t('project.crud.project_details')}*`", orientation="vertical", :helper="$t('project.crud.project_details_placeholder')", :error="$v.project.details.$error")
+        u-wysiwyg(v-model="project.details", :onChange="updateFormPercentage", field="details")
+      q-field(:label="`${$t('project.crud.project_tags')}*`", orientation="vertical", :helper="$t('project.crud.project_tags_help')", :error="$v.project.tags.$error")
+        q-chips-input(v-model="project.tags", placeholder="video decentralized ipfs", clearable, @blur="updateFormPercentage('tags')")
 
     div.col-md-4.col-sm-12.col-xs-12
       q-scroll-observable(@scroll="scrollHandler")
       q-list(separator, :class="fixedProgress ? 'fixed' : ''").create-edit-project-progress
-        q-list-header {{ formPercentage }}% completed
+        q-list-header {{ formPercentage }}% {{$t('project.crud.completed')}}
         q-item
           q-item-main
             q-progress(:percentage="formPercentage", height="10px")
         q-item
           q-item-main
-            q-btn.full-width(color="primary", label="Save", @click="submit")
+            q-btn.full-width(color="primary", :label="$t('project.crud.save')", @click="submit")

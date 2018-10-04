@@ -38,5 +38,26 @@ export default {
     translations: 'traductions',
     tutorials: 'tutoriels',
     'video-tutorials': 'tutoriels vidéo'
+  },
+  project: {
+    crud: {
+      completed: 'complété',
+      documentation_page: 'Page de la documentation',
+      images: 'Images',
+      license: 'License',
+      not_opensource: 'Mon projet n\'est pas Open Source',
+      project_details: 'Détails du project',
+      project_details_placeholder: 'Écrivez une description complète de votre projet…',
+      project_name: 'Nom du projet',
+      project_tags: 'Tags du projet',
+      project_tags_help: 'Veuillez saisir au moins 3 tags',
+      repository: 'Repository',
+      save: 'enregistrer',
+      short_description: 'Description courte',
+      short_description_help: 'Donnez aux utilisateurs une idée de votre projet…',
+      subtitle: 'Faites bonne impression en renseignant toutes les informations du projet et choisissant de belles images.',
+      title: 'Affichez votre projet sur Utopian.io',
+      web_page: 'Site internet'
+    }
   }
 }

@@ -57,10 +57,13 @@
 <script>
 export default {
   name: 'u-wysiwyg',
-  props: ['value'],
+  props: ['value', 'onChange', 'field'],
   methods: {
     handleChange (newVal) {
       this.$emit('input', newVal)
+      if (this.onChange && this.field) {
+        this.onChange(this.field)
+      }
     }
   }
 }
