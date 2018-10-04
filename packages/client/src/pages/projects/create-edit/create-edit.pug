@@ -4,10 +4,10 @@ div
 
   div.row.gutter-sm.project-form-container
     div.col-md-8.col-sm-12.col-xs-12
-      q-field(label="Project name*", orientation="vertical", :error="$v.project.name.$error")
+      q-field(label="Name*", orientation="vertical", :error="$v.project.name.$error")
         q-input(v-model.trim="project.name", placeholder="e.g DTube", @keyup.enter="submit", @blur="updateFormPercentage('name')")
 
-      q-field(label="Github Repository", orientation="vertical", :error="$v.project.repository.$error")
+      q-field(:label="`Repository${project.closedSource ? '' : '*'}`", orientation="vertical", :error="$v.project.repository.$error")
         q-search(v-model="project.repository", placeholder="e.g dtube/dtube", icon="mdi-github-circle", :disable="project.closedSource", @blur="updateFormPercentage('repository')")
           q-autocomplete(@search="searchGithubRepositoryWrapper", :min-characters="3", :debounce="500", separator, value-field="label")
         q-checkbox(v-model.boolean="project.closedSource", label="My project is not Open Source", left-label, @input="updateFormPercentage('repository')")
@@ -21,13 +21,14 @@ div
       q-field(label="License*", orientation="vertical", :error="$v.project.license.$error")
         q-select(v-model="project.license", placeholder="MIT", :options="licenses", :before="[{ icon: 'mdi-file-outline' }]", filter, autofocus-filter, @blur="updateFormPercentage('license')")
 
-      q-field(label="Project Image*", orientation="vertical", :error="$v.project.images.$error")
-        u-file-uploader(@upload="handleImageUpload")
+      q-field(label="Images*", orientation="vertical", :error="$v.project.medias.$error")
+        q-uploader(ref="uploader", url="http://localhost:5000/api", auto-expand, multiple, hide-upload-button, extensions=".jpg,.jpeg,.png", @add="updateFormPercentage('medias')", @remove:cancel="updateFormPercentage('medias')")
 
       q-field(label="Short description*", :count="250", orientation="vertical", :error="$v.project.description.$error")
         q-input(v-model="project.description", placeholder="Give people a sense about your project…", type="textarea", maxlength="250", :max-height="150", rows="7", @keyup.enter="submit" @blur="updateFormPercentage('description')")
-
-      q-field(label="Project Tags*", orientation="vertical", helper="Please type at least 3 tags", :error="$v.project.tags.$error")
+      q-field(label="Details*", orientation="vertical", :error="$v.project.details.$error")
+        u-wysiwyg(v-model="project.details", :blur="updateFormPercentage('details')")
+      q-field(label="Tags*", orientation="vertical", helper="Please provide at least 3 tags", :error="$v.project.tags.$error")
         q-chips-input(v-model="project.tags", placeholder="e.g: video, decentralized, ipfs", clearable, @blur="updateFormPercentage('tags')")
 
     div.col-md-4.col-sm-12.col-xs-12
