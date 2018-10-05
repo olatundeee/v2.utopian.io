@@ -7,7 +7,8 @@ div
       q-field(:label="`${$t('project.crud.project_name')}*`", orientation="vertical", :error="$v.project.name.$error")
         q-input(v-model.trim="project.name", placeholder="Quasar framework", @keyup.enter="submit", @blur="updateFormPercentage('name')")
 
-      q-field(:label="`${$t('project.crud.repositories')}${project.closedSource ? '' : '*'}`", orientation="vertical", :error="$v.project.repositories.$error")
+      q-field(:label="`${$t('project.crud.repositories')}${project.closedSource ? '' : '*'}`",
+      orientation="vertical", :error="$v.project.repositories.$error")
         q-search(
         v-model="project.repositorySearch"
         placeholder="quasarframework/quasar"
@@ -15,7 +16,8 @@ div
         :after="[{icon: 'mdi-plus', content: true, handler() {addRepository()}}]"
         @blur="updateFormPercentage('repositories')"
         )
-          q-autocomplete(@search="searchGithubRepositoryWrapper", :min-characters="3", :debounce="500", separator, :value-field="v => {$v.project.$model.repositorySearchData = v; return v.label} ")
+          q-autocomplete(@search="searchGithubRepositoryWrapper", :min-characters="3", :debounce="500", separator,
+          :value-field="v => {$v.project.$model.repositorySearchData = v; return v.label} ")
         q-checkbox(v-model.boolean="project.closedSource", :label="$t('project.crud.not_opensource')", left-label, @input="updateFormPercentage('repositories')")
       q-field(v-if="!project.closedSource")
         q-list(v-for="repository in $v.project.repositories.$model", separator, :key="repository.id")
@@ -32,18 +34,23 @@ div
         q-input(v-model="project.docs", placeholder="https://quasar-framework.org/guide", @keyup.enter="submit", @blur="updateFormPercentage('docs')")
 
       q-field(:label="`${$t('project.crud.license')}*`", orientation="vertical", :error="$v.project.license.$error")
-        q-select(v-model="project.license", placeholder="MIT", :options="licenses", :before="[{ icon: 'mdi-file-outline' }]", filter, autofocus-filter, @blur="updateFormPercentage('license')")
+        q-select(v-model="project.license", placeholder="MIT", :options="licenses", :before="[{ icon: 'mdi-file-outline' }]",
+        filter, autofocus-filter, @blur="updateFormPercentage('license')")
 
       q-field(:label="`${$t('project.crud.images')}*`", orientation="vertical", :helper="$t('project.crud.images_help')", :error="$v.project.medias.$error")
-        q-uploader(ref="uploader", url="http://TODO", auto-expand, multiple, hide-upload-button, extensions=".jpg,.jpeg,.png", @add="updateFormPercentage('medias')", @remove:cancel="updateFormPercentage('medias')")
+        q-uploader(ref="uploader", url="http://TODO", auto-expand, multiple, hide-upload-button, extensions=".jpg,.jpeg,.png",
+        @add="updateFormPercentage('medias')", @remove:cancel="updateFormPercentage('medias')")
 
       q-field(:label="`${$t('project.crud.short_description')}*`", :count="250", orientation="vertical", :error="$v.project.description.$error")
-        q-input(v-model="project.description", :placeholder="$t('project.crud.short_description_help')", type="textarea", maxlength="250", :max-height="150", rows="7", @keyup.enter="submit" @blur="updateFormPercentage('description')")
+        q-input(v-model="project.description", :placeholder="$t('project.crud.short_description_help')", type="textarea",
+        maxlength="250", :max-height="150", rows="7", @keyup.enter="submit" @blur="updateFormPercentage('description')")
 
-      q-field(:label="`${$t('project.crud.project_details')}*`", orientation="vertical", :helper="$t('project.crud.project_details_placeholder')", :error="$v.project.details.$error")
+      q-field(:label="`${$t('project.crud.project_details')}*`", orientation="vertical",
+      :helper="$t('project.crud.project_details_placeholder')",:error="$v.project.details.$error")
         u-wysiwyg(v-model="project.details", :onChange="updateFormPercentage", field="details")
 
-      q-field(:label="`${$t('project.crud.project_tags')}*`", orientation="vertical", :helper="$t('project.crud.project_tags_help')", :error="$v.project.tags.$error")
+      q-field(:label="`${$t('project.crud.project_tags')}*`", orientation="vertical",
+      :helper="$t('project.crud.project_tags_help')", :error="$v.project.tags.$error")
         q-chips-input(v-model="project.tags", placeholder="video decentralized ipfs", clearable, @blur="updateFormPercentage('tags')")
 
     div.col-md-4.col-sm-12.col-xs-12
