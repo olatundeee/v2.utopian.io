@@ -68,6 +68,7 @@ export default {
     addRepository () {
       if (!this.project.repositories.find(r => r.id === this.project.repositorySearchData.id)) {
         // TODO owner verification
+        this.project.repositorySearchData.type = 'github'
         this.project.repositories.push(this.project.repositorySearchData)
         this.updateFormPercentage('repositories')
       }
