@@ -44,6 +44,7 @@ export default {
       completed: 'completed',
       documentation_page: 'Documentation page',
       images: 'Images',
+      images_help: 'This is the first thing that people will see when they come across your project. 2000x1130 ideal for hi-res.',
       license: 'License',
       not_opensource: 'My project is not Open Source',
       project_details: 'Project details',

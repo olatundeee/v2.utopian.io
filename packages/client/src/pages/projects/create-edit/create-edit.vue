@@ -18,6 +18,8 @@ export default {
       project: {
         name: '',
         closedSource: false,
+        repositorySearch: '',
+        repositorySearchData: null,
         repositories: [],
         website: '',
         docs: '',
@@ -33,7 +35,8 @@ export default {
     project: {
       name: {required},
       repositories: {
-        required: requiredUnless(function () { return this.project.closedSource })
+        required: requiredUnless(function () { return this.project.closedSource }),
+        minLength: minLength(1)
       },
       website: {url},
       docs: {url},
@@ -62,14 +65,25 @@ export default {
     searchGithubRepositoryWrapper (query, done) {
       this.searchGithubRepository(query).then(done)
     },
+    addRepository () {
+      if (!this.project.repositories.find(r => r.id === this.project.repositorySearchData.id)) {
+        // TODO owner verification
+        this.project.repositories.push(this.project.repositorySearchData)
+        this.updateFormPercentage('repositories')
+      }
+    },
+    removeRepository (id) {
+      this.project.repositories = this.project.repositories.filter(r => r.id !== id)
+      this.updateFormPercentage('repositories')
+    },
     updateFormPercentage (field) {
       this.$v.project[field].$touch()
       const fields = Object.keys(this.$v.project.$params)
       const completed = fields.reduce((count, key) => {
         if (this.$v.project[key].$error) return count
         if (key === 'medias' && this.$refs.uploader && this.$refs.uploader.files.length > 0) return count + 1
-        if (key === 'repository' && this.project.closedSource) return count + 1
         if (typeof this.project[key] === 'string' && this.project[key] !== '') return count + 1
+        if (key === 'repositories' && this.project.closedSource) return count + 1
         if (Array.isArray(this.project[key]) && this.project[key].length > 0) return count + 1
         return count
       }, 0)
