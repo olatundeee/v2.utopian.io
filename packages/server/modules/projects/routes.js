@@ -59,7 +59,17 @@ routes.push([
       tags: ['api', 'projects'],
       validate: Validate.saveProject
     }
+  },
+  {
+    method: 'POST',
+    path: '/v1/projects/isprojectadmin',
+    handler: (req, h, next) => Handlers.isProjectAdmin(req, h, next),
+    options: {
+      tags: ['api', 'projects'],
+      validate: Validate.isProjectAdmin
+    }
   }
+
 ])
 
 module.exports = routes

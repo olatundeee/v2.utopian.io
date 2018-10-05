@@ -48,10 +48,18 @@ const editProjectBySlug = {
   }
 }
 
+const isProjectAdmin = {
+  payload: {
+    project: Joi.string().required(),
+    type: Joi.string().required()
+  }
+}
+
 module.exports = {
   saveProject,
   editProjectBySlug,
   getProjectBySlug,
   deleteProjectBySlug,
-  getProjects
+  getProjects,
+  isProjectAdmin
 }

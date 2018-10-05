@@ -53,9 +53,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      searchGithubRepository: 'github/searchGithubRepository'
-    }),
+    ...mapActions('github', [
+      'searchGithubRepository',
+      'isProjectAdmin'
+    ]),
     ...mapActions({
       saveProject: 'projects/saveProject'
     }),
@@ -65,12 +66,19 @@ export default {
     searchGithubRepositoryWrapper (query, done) {
       this.searchGithubRepository(query).then(done)
     },
-    addRepository () {
+    async addRepository () {
       if (!this.project.repositories.find(r => r.id === this.project.repositorySearchData.id)) {
-        // TODO owner verification
         this.project.repositorySearchData.type = 'github'
-        this.project.repositories.push(this.project.repositorySearchData)
-        this.updateFormPercentage('repositories')
+        if (await this.isProjectAdmin(this.project.repositorySearchData)) {
+          this.project.repositories.push(this.project.repositorySearchData)
+          this.updateFormPercentage('repositories')
+        } else {
+          Notify.create({
+            type: 'negative',
+            position: 'bottom-right',
+            message: this.$t('project.crud.not_project_admin')
+          })
+        }
       }
     },
     removeRepository (id) {
@@ -95,15 +103,6 @@ export default {
       if (this.$v.project.$invalid) {
         return
       }
-      if (this.project.platforms.github.repository && !this.isAllowed) {
-        Notify.create({
-          type: 'negative',
-          position: 'bottom-right',
-          message: 'You must be the owner of the GitHub project.'
-        })
-        return
-      }
-
       await this.saveProject(this.project)
     }
   }

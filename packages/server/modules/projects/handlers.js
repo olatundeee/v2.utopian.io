@@ -1,6 +1,8 @@
 const Boom = require('boom')
-const Project = require('./project.model')
 const Slugify = require('slugify')
+const Project = require('./project.model')
+const User = require('../users/user.model')
+const { getUserProjectPermission } = require('../../utils/github')
 
 const getProjects = async (req, h) => {
   const { q } = req.payload
@@ -51,11 +53,30 @@ const saveProject = async (req, h) => {
   return h.response({ data })
 }
 
+const isProjectAdmin = async (req, h) => {
+  const user = await User.findOne({ username: req.auth.credentials.username })
+  const provider = user.authProviders.find((p) => p.type === req.payload.type)
+  if (provider && provider.token) {
+    if (provider.type === 'github') {
+      const [owner, name] = req.payload.project.split('/')
+      const permission = await getUserProjectPermission({
+        token: provider.token,
+        owner,
+        name
+      })
+      return h.response({ data: permission.toString().toUpperCase() === 'ADMIN' })
+    }
+  }
+
+  return h.response({ data: false })
+}
+
 module.exports = {
   getProjects,
   saveProject,
   getProjectBySlug,
   deleteProjectBySlug,
   editProjectBySlug,
-  getFeaturedProjects
+  getFeaturedProjects,
+  isProjectAdmin
 }

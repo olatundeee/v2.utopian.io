@@ -47,6 +47,7 @@ export default {
       images_help: 'This is the first thing that people will see when they come across your project. 2000x1130 ideal for hi-res.',
       license: 'License',
       not_opensource: 'My project is not Open Source',
+      not_project_admin: 'You must be an admin of the project.',
       project_details: 'Project details',
       project_details_placeholder: 'Write everything about your project…',
       project_name: 'Project name',
