@@ -17,12 +17,13 @@ div
         )
           q-autocomplete(@search="searchGithubRepositoryWrapper", :min-characters="3", :debounce="500", separator, :value-field="v => {$v.project.$model.repositorySearchData = v; return v.label} ")
         q-checkbox(v-model.boolean="project.closedSource", :label="$t('project.crud.not_opensource')", left-label, @input="updateFormPercentage('repositories')")
-      q-list(v-if="!project.closedSource", v-for="repository in $v.project.repositories.$model", separator, :key="repository.id")
-        q-item
-          q-item-side(:avatar="repository.avatar")
-          q-item-main(:label="repository.label")
-          q-item-side(right)
-            q-btn(round, dense, icon="mdi-minus-circle", color="red", size="md" @click="() => removeRepository(repository.id)")
+      q-field(v-if="!project.closedSource")
+        q-list(v-for="repository in $v.project.repositories.$model", separator, :key="repository.id")
+          q-item
+            q-item-side(:avatar="repository.avatar")
+            q-item-main(:label="repository.label")
+            q-item-side(right)
+              q-btn(round, dense, icon="mdi-minus-circle", color="red", size="md" @click="() => removeRepository(repository.id)")
 
       q-field(:label="$t('project.crud.web_page')", orientation="vertical", :error="$v.project.website.$error")
         q-input(v-model="project.website", placeholder="https://quasar-framework.org", @keyup.enter="submit", @blur="updateFormPercentage('website')")
