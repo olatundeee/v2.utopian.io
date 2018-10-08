@@ -46,8 +46,7 @@ export default {
       images: 'Images',
       images_help: 'This is the first thing that people will see when they come across your project. 2000x1130 ideal for hi-res.',
       license: 'License',
-      not_opensource: 'My project is not Open Source',
-      not_project_admin: 'You must be an admin of the project.',
+      not_opensource: 'The code of my project is closed',
       project_details: 'Project details',
       project_details_placeholder: 'Write everything about your project…',
       project_name: 'Project name',
@@ -59,7 +58,11 @@ export default {
       short_description_help: 'Give people a sense about your project…',
       subtitle: 'Make a great first impression with all the project information filled and great images about your project.',
       title: 'Bring your project to Utopian.io',
-      web_page: 'Web page'
+      web_page: 'Web page',
+      error: {
+        not_project_admin: 'You must be an admin of the project.',
+        project_exists: 'You already have a project with this name.'
+      }
     }
   }
 }
