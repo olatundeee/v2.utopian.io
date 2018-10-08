@@ -28,12 +28,27 @@ export default {
         description: '',
         details: '',
         tags: []
-      }
+      },
+      submitting: false
     }
   },
   validations: {
     project: {
-      name: {required},
+      name: {
+        required,
+        async isNotUsed (value) {
+          if (value === '') return true
+          const available = await this.isNameAvailable(this.project.name)
+          if (!available) {
+            Notify.create({
+              type: 'negative',
+              position: 'bottom-right',
+              message: this.$t('project.crud.error.project_exists')
+            })
+          }
+          return available
+        }
+      },
       repositories: {
         required: requiredUnless(function () { return this.project.closedSource }),
         minLength: minLength(1)
@@ -57,9 +72,10 @@ export default {
       'searchGithubRepository',
       'isProjectAdmin'
     ]),
-    ...mapActions({
-      saveProject: 'projects/saveProject'
-    }),
+    ...mapActions('projects', [
+      'isNameAvailable',
+      'saveProject'
+    ]),
     scrollHandler ({ position }) {
       this.fixedProgress = position > 120
     },
@@ -76,7 +92,7 @@ export default {
           Notify.create({
             type: 'negative',
             position: 'bottom-right',
-            message: this.$t('project.crud.not_project_admin')
+            message: this.$t('project.crud.error.not_project_admin')
           })
         }
       }
@@ -103,7 +119,17 @@ export default {
       if (this.$v.project.$invalid) {
         return
       }
-      await this.saveProject(this.project)
+      this.submitting = true
+      const { closedSource, repositorySearch, repositorySearchData, ...project } = this.project
+      const result = await this.saveProject(project)
+      if (result.error) {
+        Notify.create({
+          type: 'negative',
+          position: 'bottom-right',
+          message: this.$t(`api.error.${result.error}`)
+        })
+      }
+      this.submitting = false
     }
   }
 }

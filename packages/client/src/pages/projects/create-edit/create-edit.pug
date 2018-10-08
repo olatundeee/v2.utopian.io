@@ -5,7 +5,7 @@ div
   div.row.gutter-sm.project-form-container
     div.col-md-8.col-sm-12.col-xs-12
       q-field(:label="`${$t('project.crud.project_name')}*`", orientation="vertical", :error="$v.project.name.$error")
-        q-input(v-model.trim="project.name", placeholder="Quasar framework", @keyup.enter="submit", @blur="updateFormPercentage('name')")
+        q-input(v-model.trim.lazy="project.name", placeholder="Quasar framework", @keyup.enter="submit", @blur="updateFormPercentage('name')")
 
       q-field(:label="`${$t('project.crud.repositories')}${project.closedSource ? '' : '*'}`",
       orientation="vertical", :error="$v.project.repositories.$error")
@@ -18,7 +18,6 @@ div
         )
           q-autocomplete(@search="searchGithubRepositoryWrapper", :min-characters="3", :debounce="500", separator,
           :value-field="v => {$v.project.$model.repositorySearchData = v; return v.label} ")
-        q-checkbox(v-model.boolean="project.closedSource", :label="$t('project.crud.not_opensource')", left-label, @input="updateFormPercentage('repositories')")
       q-field(v-if="!project.closedSource")
         q-list(v-for="repository in $v.project.repositories.$model", separator, :key="repository.id")
           q-item

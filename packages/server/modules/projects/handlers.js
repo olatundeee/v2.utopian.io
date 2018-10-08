@@ -1,8 +1,10 @@
+const crypto = require('crypto')
 const Boom = require('boom')
 const Slugify = require('slugify')
 const Project = require('./project.model')
 const User = require('../users/user.model')
 const { getUserProjectPermission } = require('../../utils/github')
+const { sanitizeHtml } = require('../../utils/html-sanitizer')
 
 const getProjects = async (req, h) => {
   const { q } = req.payload
@@ -42,15 +44,60 @@ const editProjectBySlug = async (req, h) => {
 }
 
 const saveProject = async (req, h) => {
+  const creator = req.auth.credentials.username
+
+  // A user can't have two projects with the same name
+  const projectName = await Project.findOne({ creator, name: req.payload.name })
+  if (projectName) {
+    throw Boom.badData('project-exists')
+  }
+
+  // Check for existing slug
+  const slugs = []
+  let slug = Slugify(`${creator}-${req.payload.name}`)
+  const projectSlug = await Project.countDocuments({ slugs: { $all: [slug] } })
+  if (projectSlug > 0) {
+    slug += crypto.randomBytes(5).toString('hex')
+  }
+
+  slugs.push(slug)
+
+  // Filter the repositories where the user has admin rights
+  const user = await User.findOne({ username: creator })
+  const provider = user.authProviders.find((p) => p.type === req.payload.type)
+  const repositories = req.payload.repositories.filter(async (repo) => {
+    if (repo.type === 'github') {
+      const [owner, name] = repo.label.split('/')
+      const permission = await getUserProjectPermission({
+        token: provider.token,
+        owner,
+        name
+      })
+      return permission.toString().toUpperCase() === 'ADMIN'
+    }
+
+    return false
+  })
+  if (repositories.length === 0) {
+    throw Boom.badData('project-no-repositories')
+  }
+
   const newProject = new Project({
-    ...req.payload,
-    creator: req.payload.name,
-    slug: Slugify(`${req.payload.name}-${req.payload.name}`)
+    repositories,
+    creator,
+    slugs,
+    details: sanitizeHtml(req.payload.details),
+    ...req.payload
   })
 
   const data = await newProject.save()
 
   return h.response({ data })
+}
+
+const isNameAvailable = async (req, h) => {
+  const creator = req.auth.credentials.username
+  return h.response({ data: await Project.countDocuments({ creator, name: req.payload.name }) === 0 })
 }
 
 const isProjectAdmin = async (req, h) => {
@@ -78,5 +125,6 @@ module.exports = {
   deleteProjectBySlug,
   editProjectBySlug,
   getFeaturedProjects,
+  isNameAvailable,
   isProjectAdmin
 }
