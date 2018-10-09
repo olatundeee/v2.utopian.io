@@ -17,6 +17,7 @@ export default {
     recent_contributions: 'recent contributions',
     replied: 'replied',
     reply: 'reply',
+    save: 'Save',
     see_all_contributions: 'See all contributions',
     see_all_projects: 'See all projects',
     sorry: 'sorry',
@@ -39,12 +40,12 @@ export default {
     tutorials: 'tutorials',
     'video-tutorials': 'video-tutorials'
   },
-  project: {
-    crud: {
+  projects: {
+    'create-edit': {
       completed: 'completed',
       documentation_page: 'Documentation page',
       images: 'Images',
-      images_help: 'This is the first thing that people will see when they come across your project. 2000x1130 ideal for hi-res.',
+      images_help: 'This is the first thing that people will see when they come across your project. 2000x1130 ideal for hi-res. Select a maximum of 5 images.',
       license: 'License',
       not_opensource: 'The code of my project is closed',
       project_details: 'Project details',
@@ -53,7 +54,6 @@ export default {
       project_tags: 'Project tags',
       project_tags_help: 'Please provide at least 3 tags',
       repositories: 'Repositories',
-      save: 'Save',
       short_description: 'Short description',
       short_description_help: 'Give people a sense about your project…',
       subtitle: 'Make a great first impression with all the project information filled and great images about your project.',
@@ -64,5 +64,8 @@ export default {
         project_exists: 'You already have a project with this name.'
       }
     }
+  },
+  errors: {
+    file_upload: 'An error occurred while uploading'
   }
 }

@@ -17,6 +17,7 @@ export default {
     recent_contributions: 'contributions récentes',
     replied: 'a répondu',
     reply: 'répondre',
+    save: 'enregistrer',
     see_all_contributions: 'Voir toutes les contributions',
     see_all_projects: 'Voir tous les projets',
     sorry: 'désolé',
@@ -39,8 +40,8 @@ export default {
     tutorials: 'tutoriels',
     'video-tutorials': 'tutoriels vidéo'
   },
-  project: {
-    crud: {
+  projects: {
+    'create-edit': {
       completed: 'complété',
       documentation_page: 'Page de la documentation',
       images: 'Images',
@@ -52,11 +53,10 @@ export default {
       project_name: 'Nom du projet',
       project_tags: 'Tags du projet',
       project_tags_help: 'Veuillez saisir au moins 3 tags',
-      repositories: 'Repositories',
-      save: 'enregistrer',
+      repositories: 'Référentiels',
       short_description: 'Description courte',
       short_description_help: 'Donnez aux utilisateurs une idée de votre projet…',
-      subtitle: 'Faites bonne impression en renseignant toutes les informations du projet et choisissant de belles images.',
+      subtitle: 'Faites bonne impression en renseignant toutes les informations du projet et choisissant de belles images. Choisissez jusque 5 images.',
       title: 'Affichez votre projet sur Utopian.io',
       web_page: 'Site internet',
       error: {
@@ -64,5 +64,8 @@ export default {
         project_exists: 'Vous avez déjà un projet avec ce nom.'
       }
     }
+  },
+  errors: {
+    file_upload: 'Une erreur est survenue en chargeant'
   }
 }
