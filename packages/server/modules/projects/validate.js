@@ -29,7 +29,7 @@ const createProject = {
     medias: Joi.array().required(),
     description: Joi.string().trim().required(),
     details: Joi.string().trim().required(),
-    tags: Joi.array().min(3).unique().items(Joi.string().trim().alphanum()).required()
+    tags: Joi.array().min(3).max(6).unique().items(Joi.string().trim().alphanum()).required()
   }
 }
 
@@ -44,7 +44,7 @@ const editProject = {
     medias: Joi.array().required(),
     description: Joi.string().trim().required(),
     details: Joi.string().trim().required(),
-    tags: Joi.array().min(3).unique().items(Joi.string().trim().alphanum()).required()
+    tags: Joi.array().min(3).max(6).unique().items(Joi.string().trim().alphanum()).required()
   }
 }
 

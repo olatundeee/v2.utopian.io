@@ -65,7 +65,8 @@ export default {
       details: {required},
       tags: {
         required,
-        minLength: minLength(3)
+        minLength: minLength(3),
+        maxLength: maxLength(6)
       }
     }
   },
@@ -161,6 +162,7 @@ export default {
       const fields = Object.keys(this.$v.project.$params)
       const completed = fields.reduce((count, key) => {
         if (this.$v.project[key].$error) return count
+        if (typeof this.project[key] === 'string' && this.project[key] !== '') return count + 1
         if (key === 'repositories' && this.project.closedSource) return count + 1
         if (Array.isArray(this.project[key]) && this.project[key].length > 0) return count + 1
         return count
