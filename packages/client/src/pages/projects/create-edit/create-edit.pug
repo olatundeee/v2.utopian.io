@@ -57,7 +57,7 @@ div
 
       q-field(:label="`${$t('projects.create-edit.project_tags')}*`", orientation="vertical",
       :helper="$t('projects.create-edit.project_tags_help')", :error="$v.project.tags.$error")
-        q-chips-input(v-model="project.tags", placeholder="video decentralized ipfs", clearable, @blur="updateFormPercentage('tags')")
+        q-chips-input(v-model="project.tags", :placeholder="project.tags.length === 0 ? 'video decentralized ipfs' : ''", clearable, @blur="updateFormPercentage('tags')")
 
     div.col-md-4.col-sm-12.col-xs-12
       q-scroll-observable(@scroll="scrollHandler")
