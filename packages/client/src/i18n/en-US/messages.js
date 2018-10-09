@@ -52,7 +52,7 @@ export default {
       project_details_placeholder: 'Write everything about your project…',
       project_name: 'Project name',
       project_tags: 'Project tags',
-      project_tags_help: 'Please provide between 3 and 6 tags',
+      project_tags_help: 'Please provide between 3 and 5 tags',
       repositories: 'Repositories',
       short_description: 'Short description',
       short_description_help: 'Give people a sense about your project…',

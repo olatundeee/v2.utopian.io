@@ -66,7 +66,7 @@ export default {
       tags: {
         required,
         minLength: minLength(3),
-        maxLength: maxLength(6)
+        maxLength: maxLength(5)
       }
     }
   },
