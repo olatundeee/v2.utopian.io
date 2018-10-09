@@ -19,7 +19,7 @@ const getProjects = {
   }
 }
 
-const saveProject = {
+const createProject = {
   payload: {
     name: Joi.string().trim().required(),
     repositories: Joi.array().unique().required(),
@@ -33,8 +33,9 @@ const saveProject = {
   }
 }
 
-const editProjectBySlug = {
+const editProject = {
   payload: {
+    _id: Joi.string().trim().required(),
     name: Joi.string().trim().required(),
     repositories: Joi.array().unique().required(),
     website: Joi.string().trim().uri(),
@@ -49,6 +50,7 @@ const editProjectBySlug = {
 
 const isNameAvailable = {
   payload: {
+    _id: Joi.string(),
     name: Joi.string().trim().required()
   }
 }
@@ -61,8 +63,8 @@ const isProjectAdmin = {
 }
 
 module.exports = {
-  saveProject,
-  editProjectBySlug,
+  createProject,
+  editProject,
   getProjectBySlug,
   deleteProjectBySlug,
   getProjects,

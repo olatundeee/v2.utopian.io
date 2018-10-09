@@ -4,7 +4,7 @@ const Schema = Mongoose.Schema
 
 const projects = new Schema({
   blacklisted: { type: Boolean, default: false },
-  creator: { type: String, required: true },
+  owner: { type: String, required: true },
   description: { type: String, required: true, text: true },
   details: { type: String, text: true },
   name: { type: String, required: true, index: { unique: true }, text: true },
@@ -14,7 +14,8 @@ const projects = new Schema({
   tags: { type: Array, required: true },
   closedSource: { type: Boolean, required: true, default: false },
   repositories: { type: Array, required: true },
-  slugs: { type: Array, required: true },
+  slug: { type: String, required: true, index: true },
+  slugs: { type: Array, index: true },
   website: { type: String },
   docs: { type: String },
   license: { type: String },

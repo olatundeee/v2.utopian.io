@@ -1,7 +1,7 @@
 <script>
 import { Notify } from 'quasar'
-import { mapActions } from 'vuex'
-import { minLength, required, requiredUnless, url } from 'vuelidate/lib/validators'
+import { mapActions, mapGetters } from 'vuex'
+import { maxLength, minLength, required, requiredUnless, url } from 'vuelidate/lib/validators'
 import { LicencesMixin } from 'src/mixins/licences'
 import UWysiwyg from 'src/components/form/wysiwyg'
 
@@ -38,12 +38,12 @@ export default {
         required,
         async isNotUsed (value) {
           if (value === '') return true
-          const available = await this.isNameAvailable(this.project.name)
+          const available = await this.isNameAvailable({ name: this.project.name, _id: this.project._id })
           if (!available) {
             Notify.create({
               type: 'negative',
               position: 'bottom-right',
-              message: this.$t('project.crud.error.project_exists')
+              message: this.$t('projects.create-edit.error.project_exists')
             })
           }
           return available
@@ -57,7 +57,9 @@ export default {
       docs: {url},
       license: {required},
       medias: {
-        hasImage: function () { return this.$refs.uploader.files.length > 0 }
+        required,
+        minLength: minLength(1),
+        maxLength: maxLength(5)
       },
       description: {required},
       details: {required},
@@ -67,15 +69,62 @@ export default {
       }
     }
   },
+  async mounted () {
+    if (this.$route.params && this.$route.params.name) {
+      const result = await this.fetchProject(this.$route.params.name)
+      if (!result || (this.user.username !== result.owner)) {
+        this.$router.push({ path: '/notfound' })
+      } else {
+        this.project = result
+        this.updateFormPercentage()
+      }
+    }
+  },
   methods: {
     ...mapActions('github', [
       'searchGithubRepository',
       'isProjectAdmin'
     ]),
     ...mapActions('projects', [
+      'fetchProject',
       'isNameAvailable',
-      'saveProject'
+      'saveProject',
+      'updateProject'
     ]),
+    uploadFile (file, updateProgress) {
+      const data = new FormData()
+      data.append('file', file)
+      return new Promise((resolve, reject) => {
+        this.$axios.post(
+          'https://ipfs.utopian.io/storage/upload',
+          data,
+          {
+            onUploadProgress: (progressEvent) => {
+              updateProgress(progressEvent.loaded / progressEvent.total)
+            }
+          }
+        )
+          .then((res) => {
+            if (!this.project.medias.some(m => m.type === 'image' && m.src === res.url)) {
+              this.project.medias.push({
+                type: 'image',
+                src: res.url
+              })
+              this.updateFormPercentage('medias')
+            }
+            resolve(file)
+          }).catch(() => {
+            reject(file)
+          })
+      })
+    },
+    uploadFails (file) {
+      Notify.create({
+        type: 'negative',
+        position: 'bottom-right',
+        message: `${this.$t('errors.file_upload')} ${file.name}`
+      })
+    },
     scrollHandler ({ position }) {
       this.fixedProgress = position > 120
     },
@@ -92,7 +141,7 @@ export default {
           Notify.create({
             type: 'negative',
             position: 'bottom-right',
-            message: this.$t('project.crud.error.not_project_admin')
+            message: this.$t('projects.create-edit.error.not_project_admin')
           })
         }
       }
@@ -101,13 +150,17 @@ export default {
       this.project.repositories = this.project.repositories.filter(r => r.id !== id)
       this.updateFormPercentage('repositories')
     },
+    removeMedia (src) {
+      this.project.medias = this.project.medias.filter(m => m.src !== src)
+      this.updateFormPercentage('medias')
+    },
     updateFormPercentage (field) {
-      this.$v.project[field].$touch()
+      if (field) {
+        this.$v.project[field].$touch()
+      }
       const fields = Object.keys(this.$v.project.$params)
       const completed = fields.reduce((count, key) => {
         if (this.$v.project[key].$error) return count
-        if (key === 'medias' && this.$refs.uploader && this.$refs.uploader.files.length > 0) return count + 1
-        if (typeof this.project[key] === 'string' && this.project[key] !== '') return count + 1
         if (key === 'repositories' && this.project.closedSource) return count + 1
         if (Array.isArray(this.project[key]) && this.project[key].length > 0) return count + 1
         return count
@@ -120,8 +173,14 @@ export default {
         return
       }
       this.submitting = true
-      const { closedSource, repositorySearch, repositorySearchData, ...project } = this.project
-      const result = await this.saveProject(project)
+      const { closedSource, repositorySearch, repositorySearchData, owner, _id, ...project } = this.project
+      let result
+      if (!_id) {
+        result = await this.saveProject(project)
+      } else {
+        project._id = _id
+        result = await this.updateProject(project)
+      }
       if (result.error) {
         Notify.create({
           type: 'negative',
@@ -131,6 +190,11 @@ export default {
       }
       this.submitting = false
     }
+  },
+  computed: {
+    ...mapGetters('auth', [
+      'user'
+    ])
   }
 }
 </script>
