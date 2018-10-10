@@ -143,7 +143,11 @@ const createProject = async (req, h) => {
 
   const data = await newProject.save()
 
-  return h.response({ data })
+  return h.response({
+    data: {
+      slug: data.slug
+    }
+  })
 }
 
 const isNameAvailable = async (req, h) => {

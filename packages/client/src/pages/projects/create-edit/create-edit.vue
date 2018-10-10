@@ -185,6 +185,7 @@ export default {
       let result
       if (!_id) {
         result = await this.saveProject(project)
+        this.$router.push({ path: `/project/${result.slug}/edit` })
       } else {
         project._id = _id
         result = await this.updateProject(project)
