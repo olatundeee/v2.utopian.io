@@ -69,8 +69,11 @@ const editProject = async (req, h) => {
   let slug = Slugify(`${owner}-${req.payload.name}`)
   const slugs = projectDb.slugs || []
   if (projectDb.slug !== slug) {
-    if (await Project.countDocuments({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] }) > 0) {
-      slug += crypto.randomBytes(5).toString('hex')
+    if (!projectDb.slugs.includes(slug) && await Project.countDocuments({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] }) > 0) {
+      slug += `-${crypto.randomBytes(5).toString('hex')}`
+    }
+
+    if (!projectDb.slugs.includes(projectDb.slug)) {
       slugs.push(projectDb.slug)
     }
   }
@@ -97,7 +100,11 @@ const editProject = async (req, h) => {
   )
 
   if (response.n === 1) {
-    return h.response({ message: 'update-success' })
+    return h.response({
+      data: {
+        slug
+      }
+    })
   }
 
   throw Boom.badData('update-fail')
@@ -121,7 +128,7 @@ const createProject = async (req, h) => {
   */
   let slug = Slugify(`${owner}-${req.payload.name}`)
   if (await Project.countDocuments({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] }) > 0) {
-    slug += crypto.randomBytes(5).toString('hex')
+    slug += `-${crypto.randomBytes(5).toString('hex')}`
   }
 
   // Filter the repositories where the user has admin rights
