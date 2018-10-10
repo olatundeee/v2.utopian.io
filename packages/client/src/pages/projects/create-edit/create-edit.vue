@@ -71,7 +71,9 @@ export default {
     }
   },
   async mounted () {
-    if (this.$route.params && this.$route.params.name) {
+    if (!this.user) {
+      this.$router.push({ path: `/login?returnUrl=${this.$route.path}` })
+    } else if (this.$route.params && this.$route.params.name) {
       const result = await this.fetchProject(this.$route.params.name)
       if (!result || (this.user.username !== result.owner)) {
         this.$router.push({ path: '/notfound' })
