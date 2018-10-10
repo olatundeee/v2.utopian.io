@@ -98,27 +98,31 @@ export default {
       const data = new FormData()
       data.append('file', file)
       return new Promise((resolve, reject) => {
-        this.$axios.post(
-          'https://ipfs.utopian.io/storage/upload',
-          data,
-          {
-            onUploadProgress: (progressEvent) => {
-              updateProgress(progressEvent.loaded / progressEvent.total)
+        if (this.project.medias.filter(m => m.type === 'image').length >= 5) {
+          reject(file)
+        } else {
+          this.$axios.post(
+            'https://ipfs.utopian.io/storage/upload',
+            data,
+            {
+              onUploadProgress: (progressEvent) => {
+                updateProgress(progressEvent.loaded / progressEvent.total)
+              }
             }
-          }
-        )
-          .then((res) => {
-            if (!this.project.medias.some(m => m.type === 'image' && m.src === res.url)) {
-              this.project.medias.push({
-                type: 'image',
-                src: res.url
-              })
-              this.updateFormPercentage('medias')
-            }
-            resolve(file)
-          }).catch(() => {
-            reject(file)
-          })
+          )
+            .then((res) => {
+              if (!this.project.medias.some(m => m.type === 'image' && m.src === res.url)) {
+                this.project.medias.push({
+                  type: 'image',
+                  src: res.url
+                })
+                this.updateFormPercentage('medias')
+              }
+              resolve(file)
+            }).catch(() => {
+              reject(file)
+            })
+        }
       })
     },
     uploadFails (file) {
