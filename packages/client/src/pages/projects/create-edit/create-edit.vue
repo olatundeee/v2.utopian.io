@@ -182,6 +182,8 @@ export default {
       }
       this.submitting = true
       const { closedSource, repositorySearch, repositorySearchData, owner, _id, ...project } = this.project
+      if (project.docs === '') { delete project.docs }
+      if (project.website === '') { delete project.website }
       let result
       if (!_id) {
         result = await this.saveProject(project)
