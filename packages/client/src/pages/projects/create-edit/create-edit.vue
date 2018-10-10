@@ -187,7 +187,6 @@ export default {
       let result
       if (!_id) {
         result = await this.saveProject(project)
-        this.$router.push({ path: `/project/${result.slug}/edit` })
       } else {
         project._id = _id
         result = await this.updateProject(project)
@@ -198,6 +197,8 @@ export default {
           position: 'bottom-right',
           message: this.$t(`api.error.${result.error}`)
         })
+      } else {
+        this.$router.push({ path: `/project/${result.slug}/edit` })
       }
       this.submitting = false
     }
