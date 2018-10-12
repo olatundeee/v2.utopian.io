@@ -79,6 +79,7 @@ export default {
         this.$router.push({ path: '/notfound' })
       } else {
         this.project = result
+        this.$v.project.$touch()
         this.updateFormPercentage()
       }
     }
